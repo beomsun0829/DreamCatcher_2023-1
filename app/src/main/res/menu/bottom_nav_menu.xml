@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_alarm"
+        android:icon="@mipmap/ic_alarm_foreground"
+        android:title="Alarm" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@mipmap/ic_statistics_foreground"
+        android:title="Statistic" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@mipmap/ic_user_foreground"
+        android:title="Profile" />
+
+</menu>
