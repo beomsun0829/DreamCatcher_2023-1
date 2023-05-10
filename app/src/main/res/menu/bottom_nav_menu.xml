@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/navigation_alarm"
-        android:icon="@mipmap/ic_alarm_foreground"
+        android:icon="@drawable/ic_underbar_alarm"
         android:title="Alarm" />
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@mipmap/ic_statistics_foreground"
+        android:icon="@drawable/ic_underbar_statistics"
         android:title="Statistic" />
 
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@mipmap/ic_user_foreground"
+        android:icon="@drawable/ic_underbar_user"
         android:title="Profile" />
 
 </menu>
