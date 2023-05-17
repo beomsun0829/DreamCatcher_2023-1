@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentAlarmBinding;
 
 public class AlarmFragment extends Fragment {
@@ -26,6 +27,8 @@ public class AlarmFragment extends Fragment {
 
         final TextView textView = binding.textAlarm;
         alarmViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+
         return root;
     }
 

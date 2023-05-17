@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".ui.alarm.EndSleep">
+
+  <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="40dp"
+      android:text="0:00 ~ 0:00"
+      android:textSize="30dp" />
+
+  <TextView
+      android:id="@+id/textView5"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="7시간 45분"
+      android:textSize="40dp" />
+
+  <TextView
+      android:id="@+id/textView7"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:background="@null"
+      android:text="메모" />
+
+  <EditText
+      android:id="@+id/editMemo"
+      android:layout_width="380dp"
+      android:layout_height="150dp"
+      android:background="#DCDCDC"
+      android:ems="10"
+      android:hint="오늘의 수면을 기록해보세요."
+      android:inputType="textPersonName"
+      android:padding="10dp" />
+
+  <TextView
+      android:id="@+id/textView6"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:background="@null"
+      android:text="수면 만족도" />
+
+  <RatingBar
+      android:id="@+id/ratingBar2"
+      android:layout_width="240dp"
+      android:layout_height="wrap_content"
+      android:numStars="5" />
+
+  <Button
+      android:id="@+id/btnResult"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="60dp"
+      android:text="결과보기" />
+
+</LinearLayout>
