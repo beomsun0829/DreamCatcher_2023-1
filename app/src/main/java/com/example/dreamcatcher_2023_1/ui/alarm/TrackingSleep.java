@@ -53,6 +53,10 @@ public class TrackingSleep extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),EndSleep.class);
                 startActivity(intent);
 
+                Intent resultSleepIntent = new Intent(getApplicationContext(), ResultSleep.class);
+                resultSleepIntent.putExtra("date", date);
+                startActivity(resultSleepIntent);
+
 //                Intent intent2 = new Intent(TrackingSleep.this, ResultSleep.class);
 //                intent2.putExtra("monthStr", monthStr);
 //                intent2.putExtra("date", date);
