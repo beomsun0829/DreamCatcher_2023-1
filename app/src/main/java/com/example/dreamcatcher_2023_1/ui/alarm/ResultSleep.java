@@ -17,7 +17,6 @@ public class ResultSleep extends AppCompatActivity {
 
         viewMemo = (TextView)findViewById(R.id.viewMemo);
 
-
        String memo = getIntent().getStringExtra("memo");
 //        String monthStr = getIntent().getStringExtra("monStr");
 //        int date = getIntent().getSExtra("date");

@@ -50,20 +50,12 @@ public class TrackingSleep extends AppCompatActivity {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),EndSleep.class);
-                startActivity(intent);
-
                 Intent resultSleepIntent = new Intent(getApplicationContext(), ResultSleep.class);
                 resultSleepIntent.putExtra("date", date);
                 startActivity(resultSleepIntent);
 
-//                Intent intent2 = new Intent(TrackingSleep.this, ResultSleep.class);
-//                intent2.putExtra("monthStr", monthStr);
-//                intent2.putExtra("date", date);
-//                intent2.putExtra("dayOfWeekStr", dayOfWeekStr);
-
-//                startActivity(intent2);
-
+                Intent intent = new Intent(getApplicationContext(),EndSleep.class);
+                startActivity(intent);
 
 
             }
