@@ -23,6 +23,8 @@ public class ResultSleepFragment extends Fragment {
         binding = FragmentResultSleepBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
+
         return  root;
 }
 }

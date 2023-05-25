@@ -10,7 +10,7 @@
     tools:context=".ui.alarm.EndSleep">
 
   <TextView
-      android:id="@+id/textView2"
+      android:id="@+id/viewSleepTime"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="40dp"
@@ -18,7 +18,7 @@
       android:textSize="30dp" />
 
   <TextView
-      android:id="@+id/textView5"
+      android:id="@+id/viewTotalSleepTime"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="7시간 45분"

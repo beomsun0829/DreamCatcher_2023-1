@@ -41,6 +41,10 @@ public class AlarmFragment extends Fragment {
         timePicker = binding.timepicker;
         viewPreTime = binding.viewPreTime;
 
+        alarmHours=startHours;
+        alarmMinute=startMinute;
+        setPredictionTime(startHours, startMinute);
+
 //TimePicker 동작 리스너
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -48,18 +52,9 @@ public class AlarmFragment extends Fragment {
                 //사용자 알람 시간 세팅
                 alarmHours=hour;
                 alarmMinute=minute;
-                //예상 알람 시간 시간 세팅(수정 중)
-                hours = hour;
-                minutes = minute;
-                int f_hours = hour;
-                int s_hours = hour;
-                int f_minute= minute-10;
-                int s_minute = minute+10;
-                String f_hourOfDay ="PM", s_hourOfDay="AM";
 
-                 predictionTime= f_hours+":"+f_minute+" "+f_hourOfDay+" - "+s_hours+":"+s_minute+" "+s_hourOfDay;
-                viewPreTime.setText(predictionTime);
-
+                //예상 알람 시간 세팅
+                setPredictionTime(hour, minute);
             }
         });
 
@@ -77,9 +72,11 @@ public class AlarmFragment extends Fragment {
                 bundle.putInt("startMinute", startMinute);
                 bundle.putInt("alarmHours", alarmHours);
                 bundle.putInt("alarmMinute", alarmMinute);
+                bundle.putString("predictionTime", predictionTime);
                 trackingSleep.setArguments(bundle);
             //fragment 전환
                 transaction.replace(R.id.layoutMain, trackingSleep);
+                transaction.addToBackStack(null);
                 transaction.commit();
 
 
@@ -95,9 +92,6 @@ public class AlarmFragment extends Fragment {
         binding = null;
     }
     private void recordSleepStart() {
-        // 현재 시간을 가져와서 형식화
-//        startTracking = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-
             // 현재 시간을 가져오기
             long currentTimeMillis = System.currentTimeMillis();
             Date currentDate = new Date(currentTimeMillis);
@@ -107,9 +101,46 @@ public class AlarmFragment extends Fragment {
             // 시간과 분을 가져오기
             startHours = calendar.get(Calendar.HOUR_OF_DAY);
             startMinute = calendar.get(Calendar.MINUTE);
-
     }
-    public void setPredictionTime(int hours, int minutes, String hourOfDay){
+//예상 알람 시간 세팅(기준 10분)
+    public void setPredictionTime(int hour, int minute){
+        int f_hour= hour, s_hour=hour;
+        int f_minute = minute-10 , s_minute=minute+10;
+        String f_hourOfDay="AM", s_hourOfDay="AM";
+        String f_minutes, s_minutes;
 
+        if(f_minute<0){
+            f_hour-=1;
+            f_minute=f_minute+60;
+            if(f_hour<0){
+                f_hour+=12;
+            }
+        }
+        else {
+            f_hour=hour;
+            f_minute=minute-10;
+        }
+        if(s_minute>60){
+            s_hour+=1;
+            s_minute-=60;
+        }
+        else {
+            s_hour=hour;
+            s_minute=minute+10;
+        }
+        if(f_hour<12) f_hourOfDay="AM";
+        else f_hourOfDay="PM";
+
+        if(s_hour<12) s_hourOfDay="AM";
+        else s_hourOfDay="PM";
+
+        if(f_minute<10) f_minutes="0"+f_minute;
+        else{
+            f_minutes=Integer.toString(f_minute);
+        }
+        if(s_minute<10) s_minutes="0"+s_minute;
+        else s_minutes=Integer.toString(s_minute);
+        predictionTime= f_hour+":"+f_minutes+" "+f_hourOfDay+" - "+s_hour+":"+s_minutes+" "+s_hourOfDay;
+        viewPreTime.setText(predictionTime);
     }
 }
