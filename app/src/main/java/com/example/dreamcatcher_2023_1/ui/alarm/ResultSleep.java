@@ -13,7 +13,7 @@ public class ResultSleep extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_result_sleep);
+        setContentView(R.layout.fragment_result_sleep);
 
         viewMemo = (TextView)findViewById(R.id.viewMemo);
 

@@ -1,43 +1,46 @@
 package com.example.dreamcatcher_2023_1.ui.alarm;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.dreamcatcher_2023_1.R;
+import com.example.dreamcatcher_2023_1.databinding.FragmentAlarmBinding;
+import com.example.dreamcatcher_2023_1.databinding.FragmentTrackingSleepBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class TrackingSleep extends AppCompatActivity {
-
-    TextView viewNowTime, viewAlarm, viewSetAlarm;
+public class TrackingSleepFragment extends Fragment {
+    TextView viewCurrentTime;
     Button btnStop;
-    private TextView clockTextView;
     private Handler handler;
     private Runnable runnable;
 
     String monthStr = "";
     String dayOfWeekStr = "";
     int date;
-
+    FragmentTrackingSleepBinding binding;
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_tracking_sleep);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentTrackingSleepBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
-        viewNowTime =(TextView) findViewById(R.id.viewCurrentTime);
-        viewAlarm = (TextView) findViewById(R.id.viewAlarm);
-        btnStop = (Button) findViewById(R.id.btnStop);
+        viewCurrentTime=binding.viewCurrentTime;
+        btnStop=binding.btnStop;
 
-        String hours = getIntent().getStringExtra("Hours");
-        viewSetAlarm.setText(hours);
+
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -48,29 +51,24 @@ public class TrackingSleep extends AppCompatActivity {
             }
         };
 
-
-        //측정 중지
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent resultSleepIntent = new Intent(getApplicationContext(), ResultSleep.class);
-                resultSleepIntent.putExtra("date", date);
-                startActivity(resultSleepIntent);
-
-                Intent intent = new Intent(getApplicationContext(),EndSleep.class);
-                startActivity(intent);
-
-
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                EndSleepFragment endSleep = new EndSleepFragment();
+                transaction.replace(R.id.layoutMain, endSleep);
+                transaction.commit();
             }
         });
+        return root;
     }
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         handler.postDelayed(runnable, 0); // 액티비티가 활성화될 때 시계 시작
     }
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable); // 액티비티가 비활성화될 때 시계 정지
     }
@@ -147,8 +145,9 @@ public class TrackingSleep extends AppCompatActivity {
         }
 
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        String currentTime = dateFormat.format(calendar.getTime());
-        viewNowTime.setText(currentTime);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        String currentTime = timeFormat.format(calendar.getTime());
+        viewCurrentTime.setText(currentTime);
     }
+
 }
