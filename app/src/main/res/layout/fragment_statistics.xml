@@ -6,102 +6,203 @@
     android:layout_height="match_parent"
     tools:context=".ui.statistics.StatisticsFragment">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="20dp"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChart"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="16dp" />
+            <TextView
+                android:id="@+id/currentDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:text="Current Date"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/sleepTime"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4px"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="#777777"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+
+                android:orientation="horizontal">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/pieChart"
                     android:layout_gravity="center"
-                    android:text="Sleep Time: " />
+                    android:orientation="horizontal">
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/sleepTimeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="Sleep Time: " />
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChart"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@id/sleepTime"
-            android:layout_margin="30dp" />
+                    <TextView
+                        android:id="@+id/sleepTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="16dp"
-            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4px"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="#777777"/>
 
-            <TextView
-                android:id="@+id/sleepRegularity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lineChart"
-                android:layout_weight="2"
-                android:text="Sleep Regularity: " />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/timeToFallAsleep"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/sleepRegularity"
-                android:text="Time to Fall Asleep: "
-                android:layout_weight="2"
-                android:layout_gravity="center"
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="15dp"
                 />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="16dp"
-            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4px"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="#777777" />
 
-            <TextView
-                android:id="@+id/bedTime"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/timeToFallAsleep"
-                android:layout_weight="2"
-                android:text="Bed Time: " />
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/bedTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:text="10 Hours" />
+
+                        <TextView
+                            android:id="@+id/bedTimeLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bed Time" />
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/wakeUpTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:text="8:00 AM" />
+
+                        <TextView
+                            android:id="@+id/wakeUpTimeLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Wake Up Time" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/sleepRegularity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:text="90%" />
+
+                        <TextView
+                            android:id="@+id/sleepRegularityLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Sleep Regularity" />
+
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/timeToSleep"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:text="15 min" />
+
+                        <TextView
+                            android:id="@+id/timeToSleepLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Time to Sleep" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
 
             <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
 
-            <TextView
-                android:id="@+id/wakeUpTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/bedTime"
-                android:layout_weight="2"
-                android:text="Wake Up Time: " />
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
