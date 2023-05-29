@@ -85,7 +85,7 @@ public class StatisticsFragment extends Fragment {
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
 
-    // Hide labels, gridlines, and axis lines
+        // Hide labels, gridlines, and axis lines
         lineChart.getXAxis().setDrawGridLines(false);
         lineChart.getXAxis().setDrawAxisLine(false);
         lineChart.getXAxis().setDrawLabels(false);
@@ -97,10 +97,7 @@ public class StatisticsFragment extends Fragment {
         lineChart.getAxisRight().setDrawLabels(false);
         lineChart.getDescription().setEnabled(false);
         lineChart.getLegend().setEnabled(false);
-
         lineChart.invalidate(); // refresh
-
-
 
         return root;
     }
