@@ -1,5 +1,7 @@
 package com.example.dreamcatcher_2023_1.ui.alarm;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentAlarmBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -80,6 +85,8 @@ public class AlarmFragment extends Fragment {
                 transaction.commit();
 
 
+                runSleepEvent();
+
             }
         });
 
@@ -143,4 +150,14 @@ public class AlarmFragment extends Fragment {
         predictionTime= f_hour+":"+f_minutes+" "+f_hourOfDay+" - "+s_hour+":"+s_minutes+" "+s_hourOfDay;
         viewPreTime.setText(predictionTime);
     }
+
+    public void runSleepEvent() {
+
+    }
+
+
+
+
 }
+
+
