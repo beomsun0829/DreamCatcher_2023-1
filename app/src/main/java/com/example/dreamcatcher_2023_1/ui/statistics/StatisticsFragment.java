@@ -11,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.DatePickerDialog;
+import java.util.Calendar;
+
+
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentStatisticsBinding;
 import com.github.mikephil.charting.charts.PieChart;
@@ -36,6 +40,33 @@ public class StatisticsFragment extends Fragment {
 
         binding = FragmentStatisticsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+
+
+
+
+        // Get current date
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        // Current date TextView
+        TextView currentDate = root.findViewById(R.id.currentDate);
+        currentDate.setText(String.format("%d/%d/%d", year, month+1, day));  // month is 0-indexed
+
+        currentDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        (view1, datePickerYear, datePickerMonth, datePickerDay) -> currentDate.setText(String.format("%d/%d/%d", datePickerYear, datePickerMonth+1, datePickerDay)), year, month, day);
+                datePickerDialog.show();
+            }
+        });
+
+
+
+
 
         // Example data
         TextView sleepTime = root.findViewById(R.id.sleepTime);
