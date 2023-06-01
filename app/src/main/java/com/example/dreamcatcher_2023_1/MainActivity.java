@@ -1,19 +1,23 @@
 package com.example.dreamcatcher_2023_1;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.dreamcatcher_2023_1.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_ACTIVITY_RECOGNITION = 0;
     private ActivityMainBinding binding;
 
     @Override
@@ -22,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Check if the ACTIVITY_RECOGNITION permission is already granted
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // If not, request the permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
+                    REQUEST_ACTIVITY_RECOGNITION);
+        }
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -32,5 +44,4 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(navView, navController);
     }
-
 }

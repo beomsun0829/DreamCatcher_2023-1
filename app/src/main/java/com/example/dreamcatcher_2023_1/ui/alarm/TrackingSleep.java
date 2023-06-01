@@ -1,13 +1,13 @@
 package com.example.dreamcatcher_2023_1.ui.alarm;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dreamcatcher_2023_1.R;
 
@@ -53,14 +53,13 @@ public class TrackingSleep extends AppCompatActivity {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent resultSleepIntent = new Intent(getApplicationContext(), ResultSleep.class);
                 resultSleepIntent.putExtra("date", date);
                 startActivity(resultSleepIntent);
 
                 Intent intent = new Intent(getApplicationContext(),EndSleep.class);
                 startActivity(intent);
-
-
             }
         });
     }
@@ -151,4 +150,5 @@ public class TrackingSleep extends AppCompatActivity {
         String currentTime = dateFormat.format(calendar.getTime());
         viewNowTime.setText(currentTime);
     }
+
 }

@@ -3,28 +3,31 @@ package com.example.dreamcatcher_2023_1.ui.alarm;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.dreamcatcher_2023_1.R;
+import com.example.dreamcatcher_2023_1.SleepReceiver;
 import com.example.dreamcatcher_2023_1.databinding.FragmentAlarmBinding;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.ActivityRecognitionClient;
+import com.google.android.gms.location.SleepSegmentRequest;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+
 
 public class AlarmFragment extends Fragment {
 
@@ -66,6 +69,9 @@ public class AlarmFragment extends Fragment {
         buttonSetAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //start Sleep tracking API
+                runSleepEvent();
+
             //수면 시작 시간 기록
                 recordSleepStart();
             //fragment transaction 객체 생성
@@ -83,9 +89,6 @@ public class AlarmFragment extends Fragment {
                 transaction.replace(R.id.layoutMain, trackingSleep);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
-
-                runSleepEvent();
 
             }
         });
@@ -152,11 +155,33 @@ public class AlarmFragment extends Fragment {
     }
 
     public void runSleepEvent() {
+        Log.d("SleepReceiver", "runSleepEvent called");
 
+        // Create a PendingIntent that starts a BroadcastReceiver in your app when sleep data is available.
+        Intent intent = new Intent(requireActivity(), SleepReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        ActivityRecognitionClient activityRecognitionClient = ActivityRecognition.getClient(requireActivity());
+        Task<Void> task = activityRecognitionClient.requestSleepSegmentUpdates(
+                pendingIntent,
+                SleepSegmentRequest.getDefaultSleepSegmentRequest()
+        );
+
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("SleepReceiver", "Success run sleep event");
+            }
+        });
+
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("SleepReceiver", "Failed run sleep event");
+                Log.d("SleepReceiver", String.valueOf(e));
+            }
+        });
     }
-
-
-
 
 }
 

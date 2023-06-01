@@ -1,7 +1,10 @@
 package com.example.dreamcatcher_2023_1.ui.alarm;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +17,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.dreamcatcher_2023_1.R;
-import com.example.dreamcatcher_2023_1.databinding.FragmentAlarmBinding;
 import com.example.dreamcatcher_2023_1.databinding.FragmentTrackingSleepBinding;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.ActivityRecognitionClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,6 +72,10 @@ public class TrackingSleepFragment extends Fragment {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //stop sleep event
+                stopSleepEvent();
+
+
                 //종료시간 측정
                 recordSleepEnd();
 
@@ -183,5 +194,32 @@ public class TrackingSleepFragment extends Fragment {
         endHours = calendar.get(Calendar.HOUR_OF_DAY);
         endMinute = calendar.get(Calendar.MINUTE);
     }
+
+    public void stopSleepEvent() {
+        Log.d("SleepReceiver", "stopSleepEvent called");
+
+        // Create an Intent with the action matching the SleepReceiver's intent filter
+        Intent intent = new Intent("com.example.dreamcatcher_2023_1.SLEEP_EVENT");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        ActivityRecognitionClient activityRecognitionClient = ActivityRecognition.getClient(requireContext());
+        Task<Void> task = activityRecognitionClient.removeSleepSegmentUpdates(pendingIntent);
+
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("SleepReceiver", "Success stop sleep event");
+            }
+        });
+
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("SleepReceiver", "Failed stop sleep event");
+                Log.d("SleepReceiver", String.valueOf(e));
+            }
+        });
+    }
+
 
 }
