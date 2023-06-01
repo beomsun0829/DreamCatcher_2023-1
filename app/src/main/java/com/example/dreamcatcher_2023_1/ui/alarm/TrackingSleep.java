@@ -145,7 +145,6 @@ public class TrackingSleep extends AppCompatActivity {
 
         }
 
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
         String currentTime = dateFormat.format(calendar.getTime());
         viewNowTime.setText(currentTime);
