@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -27,26 +28,24 @@ public class UserFragment extends Fragment {
         binding = FragmentUserBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.darkModeSwitch.setChecked(isDarkModeEnabled);
 
-        binding.darkModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.foregroundSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                isDarkModeEnabled = isChecked;
-                applyDarkMode();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The switch is checked, start your foreground service here
+                    Toast.makeText(getActivity(), "Foreground service starting", Toast.LENGTH_SHORT).show();
+                } else {
+                    // The switch is unchecked, stop your foreground service here
+                    Toast.makeText(getActivity(), "Foreground service stopping", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
 
         return root;
     }
 
-    private void applyDarkMode() {
-        if (isDarkModeEnabled) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-    }
 
     @Override
     public void onDestroyView() {
