@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentEndSleepBinding;
@@ -35,11 +37,12 @@ import java.util.Date;
 import java.util.Locale;
 
 public class EndSleepFragment extends Fragment {
-
+    private AlarmViewModel alarmViewModel;
     FragmentEndSleepBinding binding;
     Button btnResult;
+    EditText editMemo;
     TextView viewSleepTime, viewTotalSleepTime;
-    String sleepTime, totalSleepTime;
+    String sleepTime, totalSleepTime,Memo;
 
     @Nullable
     @Override
@@ -50,12 +53,14 @@ public class EndSleepFragment extends Fragment {
         btnResult=binding.btnResult;
         viewSleepTime=binding.viewSleepTime;
         viewTotalSleepTime=binding.viewTotalSleepTime;
+        editMemo=binding.editMemo;
+        // ViewModel 인스턴스 생성
+        alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
 
-        Bundle bundle = getArguments();
-        int startHours = bundle.getInt("startHours");
-        int startMinutes = bundle.getInt("startMinutes");
-        int endHours = bundle.getInt("endHours");
-        int endMinutes = bundle.getInt("endMinute");
+        int startHours = alarmViewModel.getStartHours().getValue();
+        int startMinutes = alarmViewModel.getStartMinute().getValue();
+        int endHours = alarmViewModel.getEndHours().getValue();
+        int endMinutes = alarmViewModel.getEndMinute().getValue();
 
         sleepTime = startHours+":"+startMinutes+"~"+endHours+":"+endMinutes;
         totalSleepTime=(endHours-startHours)+"시간 " + (endMinutes-startMinutes)+" 분";
@@ -88,6 +93,18 @@ public class EndSleepFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
+                Memo=editMemo.getText().toString();
+
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                ResultSleepFragment resultSleep = new ResultSleepFragment();
+
+                alarmViewModel.setMemo(Memo);
+
+                transaction.replace(R.id.layoutMain, resultSleep);
+                transaction.commit();
+
             }
         });
         return  root;

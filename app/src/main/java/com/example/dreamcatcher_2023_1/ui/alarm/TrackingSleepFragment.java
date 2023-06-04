@@ -12,7 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentTrackingSleepBinding;
@@ -23,11 +25,12 @@ import java.util.Date;
 import java.util.Locale;
 
 public class TrackingSleepFragment extends Fragment {
+    private AlarmViewModel alarmViewModel;
+
     TextView viewCurrentTime,viewAlarm;
     Button btnStop;
     private Handler handler;
     private Runnable runnable;
-
     String monthStr = "";
     String dayOfWeekStr = "";
     int date, endHours,endMinute;
@@ -38,24 +41,20 @@ public class TrackingSleepFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentTrackingSleepBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
     //객체 초기화
         viewCurrentTime=binding.viewCurrentTime;
         btnStop=binding.btnStop;
         viewAlarm=binding.viewAlarm;
         handler = new Handler();
-        Bundle bundle = getArguments();
+    // ViewModel 인스턴스 생성
+        alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
 
-    //AlarmFragment 에서 가져온 변수
-        int startHours = bundle.getInt("startHours");       //측정 시작 hours 값
-        int startMinute = bundle.getInt("startMinute");     //측정 시작 minute 값
-        int alarmHours = bundle.getInt("alarmHours");       //사용자 등록 알람 hours 값
-        int alarmMinute = bundle.getInt("alarmMinute");     //사용자 등록 알람 minute 값
-        String predictionTime = bundle.getString("predictionTime");     //예상 알람 시간
-
+    // AlarmFragment에서 가져온 변수 설정
+        int startHours = alarmViewModel.getStartHours().getValue();
+        int startMinute = alarmViewModel.getStartMinute().getValue();
+        String predictionTime = alarmViewModel.getPredictionTime().getValue();
     //예상 알람 시간 띄우기
         viewAlarm.setText(predictionTime);
-
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -64,27 +63,21 @@ public class TrackingSleepFragment extends Fragment {
             }
         };
 
-    //STOP 버튼 클릭 리스너
+
+//STOP 버튼 클릭 리스너
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //record End
                 endRecording();
-
-                //종료시간 측정
+                //종료 시간 측정
                 sleepTimerEnd();
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 EndSleepFragment endSleep = new EndSleepFragment();
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("startHours", startHours);
-                bundle.putInt("startMinute", startMinute);
-                bundle.putInt("endHours", endHours);
-                bundle.putInt("endMinutes", endMinute);
-                endSleep.setArguments(bundle);
+                //요일 전달
+                alarmViewModel.setDayOfWeekStr(dayOfWeekStr);
                 //fragment 전환
-
                 transaction.replace(R.id.layoutMain, endSleep);
                 transaction.commit();
             }
@@ -150,7 +143,7 @@ public class TrackingSleepFragment extends Fragment {
 
         switch (dayOfWeek) {
             case Calendar.SUNDAY:
-                dayOfWeekStr = "일요일";
+                dayOfWeekStr = "Monday";
                 break;
             case Calendar.MONDAY:
                 dayOfWeekStr = "월요일";
@@ -183,10 +176,12 @@ public class TrackingSleepFragment extends Fragment {
         Date currentDate = new Date(currentTimeMillis);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-
         // 시간과 분을 가져오기
         endHours = calendar.get(Calendar.HOUR_OF_DAY);
         endMinute = calendar.get(Calendar.MINUTE);
+
+        alarmViewModel.setEndHours(endHours);
+        alarmViewModel.setEndMinute(endMinute);
     }
 
     private void endRecording(){

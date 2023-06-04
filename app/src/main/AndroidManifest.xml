@@ -24,15 +24,6 @@
             android:name=".Ma"
             android:exported="false" />
         <activity
-            android:name=".ui.alarm.ResultSleep"
-            android:exported="false" />
-        <activity
-            android:name=".ui.alarm.EndSleep"
-            android:exported="false" />
-        <activity
-            android:name=".ui.alarm.TrackingSleep"
-            android:exported="true" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name" >
