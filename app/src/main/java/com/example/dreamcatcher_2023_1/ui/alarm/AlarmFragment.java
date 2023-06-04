@@ -1,5 +1,6 @@
 package com.example.dreamcatcher_2023_1.ui.alarm;
 
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentAlarmBinding;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class AlarmFragment extends Fragment {
@@ -28,22 +33,23 @@ public class AlarmFragment extends Fragment {
     String predictionTime;
     private int hours, minutes;
     int startHours, startMinute, alarmHours,alarmMinute;
+    public static MediaRecorder recorder = null;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//Fragment인스턴스 초기화
-        binding = FragmentAlarmBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        buttonSetAlarm = binding.buttonSetAlarm;
-        timePicker = binding.timepicker;
-        viewPreTime = binding.viewPreTime;
+        //Fragment인스턴스 초기화
+            binding = FragmentAlarmBinding.inflate(inflater, container, false);
+            View root = binding.getRoot();
+            buttonSetAlarm = binding.buttonSetAlarm;
+            timePicker = binding.timepicker;
+            viewPreTime = binding.viewPreTime;
 
-        alarmHours=startHours;
-        alarmMinute=startMinute;
-        setPredictionTime(startHours, startMinute);
+            alarmHours=startHours;
+            alarmMinute=startMinute;
+            setPredictionTime(startHours, startMinute);
 
-//TimePicker 동작 리스너
+        //TimePicker 동작 리스너
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hour, int minute) {
@@ -59,8 +65,10 @@ public class AlarmFragment extends Fragment {
         buttonSetAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //record
+                startRecording();
             //수면 시작 시간 기록
-                recordSleepStart();
+                sleepTimerStart();
             //fragment transaction 객체 생성
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
@@ -88,7 +96,7 @@ public class AlarmFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-    private void recordSleepStart() {
+    private void sleepTimerStart() {
             // 현재 시간을 가져오기
             long currentTimeMillis = System.currentTimeMillis();
             Date currentDate = new Date(currentTimeMillis);
@@ -99,6 +107,26 @@ public class AlarmFragment extends Fragment {
             startHours = calendar.get(Calendar.HOUR_OF_DAY);
             startMinute = calendar.get(Calendar.MINUTE);
     }
+
+    private void startRecording() {
+        String dateStr = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        File recordFile = new File(getActivity().getFilesDir(), "/recorded_audio_" + dateStr + ".3gp");
+
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFile(recordFile.getAbsolutePath());
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        try {
+            recorder.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        recorder.start();
+    }
+
+
+
 //예상 알람 시간 세팅(기준 10분)
     public void setPredictionTime(int hour, int minute){
         int f_hour= hour, s_hour=hour;

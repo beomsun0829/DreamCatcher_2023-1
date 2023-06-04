@@ -1,5 +1,6 @@
 package com.example.dreamcatcher_2023_1.ui.alarm;
 
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ public class TrackingSleepFragment extends Fragment {
     String dayOfWeekStr = "";
     int date, endHours,endMinute;
     FragmentTrackingSleepBinding binding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class TrackingSleepFragment extends Fragment {
         int alarmHours = bundle.getInt("alarmHours");       //사용자 등록 알람 hours 값
         int alarmMinute = bundle.getInt("alarmMinute");     //사용자 등록 알람 minute 값
         String predictionTime = bundle.getString("predictionTime");     //예상 알람 시간
+
     //예상 알람 시간 띄우기
         viewAlarm.setText(predictionTime);
 
@@ -60,12 +63,16 @@ public class TrackingSleepFragment extends Fragment {
                 handler.postDelayed(this, 1000);
             }
         };
-//STOP 버튼 클릭 리스너
+
+    //STOP 버튼 클릭 리스너
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //record End
+                endRecording();
+
                 //종료시간 측정
-                recordSleepEnd();
+                sleepTimerEnd();
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 EndSleepFragment endSleep = new EndSleepFragment();
@@ -80,8 +87,6 @@ public class TrackingSleepFragment extends Fragment {
 
                 transaction.replace(R.id.layoutMain, endSleep);
                 transaction.commit();
-
-
             }
         });
         return root;
@@ -171,7 +176,8 @@ public class TrackingSleepFragment extends Fragment {
         String currentTime = timeFormat.format(calendar.getTime());
         viewCurrentTime.setText(currentTime);
     }
-    private void recordSleepEnd() {
+
+    private void sleepTimerEnd() {
         // 현재 시간을 가져오기
         long currentTimeMillis = System.currentTimeMillis();
         Date currentDate = new Date(currentTimeMillis);
@@ -183,5 +189,12 @@ public class TrackingSleepFragment extends Fragment {
         endMinute = calendar.get(Calendar.MINUTE);
     }
 
+    private void endRecording(){
+        if(AlarmFragment.recorder != null){
+            AlarmFragment.recorder.stop();
+            AlarmFragment.recorder.release();
+            AlarmFragment.recorder = null;
+        }
+    }
 
 }
