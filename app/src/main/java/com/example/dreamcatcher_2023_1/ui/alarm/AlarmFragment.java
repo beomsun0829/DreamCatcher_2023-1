@@ -60,27 +60,26 @@ public class AlarmFragment extends Fragment {
         buttonSetAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //record
+                // record
                 startRecording();
-            //수면 시작 시간 기록
+                // 수면 시작 시간 기록
                 sleepTimerStart();
-            //fragment transaction 객체 생성
+                // fragment transaction 객체 생성
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
-
-            // startHours, startMinute, alarmHours, alarmMinute 값 설정
+                // startHours, startMinute, alarmHours, alarmMinute 값 설정
                 alarmViewModel.setStartHours(startHours);
                 alarmViewModel.setStartMinute(startMinute);
                 alarmViewModel.setAlarmHours(alarmHours);
                 alarmViewModel.setAlarmMinute(alarmMinute);
                 alarmViewModel.setPredictionTime(predictionTime);
-            //fragment 전환
+                // fragment 전환
                 transaction.replace(R.id.layoutMain, trackingSleep);
-                transaction.addToBackStack("AlarmFragment");
+                transaction.addToBackStack(null);
                 transaction.commit();
-
             }
         });
+
         return root;
     }
     @Override
@@ -116,7 +115,7 @@ public class AlarmFragment extends Fragment {
         recorder.start();
     }
 //예상 알람 시간 세팅(기준 10분)
-    public void setPredictionTime(int hour, int minute){
+    private void setPredictionTime(int hour, int minute){
         int f_hour= hour, s_hour=hour;
         int f_minute = minute-10 , s_minute=minute+10;
         String f_hourOfDay="AM", s_hourOfDay="AM";

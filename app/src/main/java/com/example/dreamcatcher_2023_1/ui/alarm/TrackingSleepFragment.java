@@ -4,6 +4,9 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,9 +18,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentTrackingSleepBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +42,16 @@ public class TrackingSleepFragment extends Fragment {
     String dayOfWeekStr = "";
     int date, endHours,endMinute;
     FragmentTrackingSleepBinding binding;
+    //뒤로가기
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Nullable
     @Override
@@ -49,6 +66,7 @@ public class TrackingSleepFragment extends Fragment {
     // ViewModel 인스턴스 생성
         alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
 
+
     // AlarmFragment에서 가져온 변수 설정
         int startHours = alarmViewModel.getStartHours().getValue();
         int startMinute = alarmViewModel.getStartMinute().getValue();
@@ -62,7 +80,6 @@ public class TrackingSleepFragment extends Fragment {
                 handler.postDelayed(this, 1000);
             }
         };
-
 
 //STOP 버튼 클릭 리스너
         btnStop.setOnClickListener(new View.OnClickListener() {
@@ -191,5 +208,6 @@ public class TrackingSleepFragment extends Fragment {
             AlarmFragment.recorder = null;
         }
     }
+
 
 }

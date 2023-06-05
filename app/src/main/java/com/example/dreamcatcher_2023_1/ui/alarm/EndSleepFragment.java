@@ -42,7 +42,7 @@ public class EndSleepFragment extends Fragment {
     Button btnResult;
     EditText editMemo;
     TextView viewSleepTime, viewTotalSleepTime;
-    String sleepTime, totalSleepTime,Memo;
+    String sleepTime, totalSleepTime; String Memo=null;
 
     @Nullable
     @Override
@@ -100,7 +100,8 @@ public class EndSleepFragment extends Fragment {
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 ResultSleepFragment resultSleep = new ResultSleepFragment();
 
-                alarmViewModel.setMemo(Memo);
+                    alarmViewModel.setMemo(Memo);
+
 
                 transaction.replace(R.id.layoutMain, resultSleep);
                 transaction.commit();

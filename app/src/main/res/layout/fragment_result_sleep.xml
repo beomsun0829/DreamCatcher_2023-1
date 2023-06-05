@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".ui.alarm.ResultSleep">
+    tools:context=".ui.alarm.ResultSleepFragment">
 
     <LinearLayout
         android:id="@+id/layoutDate"
@@ -29,6 +29,15 @@
             android:layout_marginLeft="10dp"
             android:text="May 8-9"
             android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/calendar"
+            android:layout_width="43dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/baseline_calendar_today_24" />
     </LinearLayout>
 
     <View
@@ -50,7 +59,8 @@
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,12 +104,153 @@
     <TextView
         android:id="@+id/viewMemo"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="80dp"
         android:padding="10dp"
         android:text="오늘은 잠을 잘 잤다." />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#778899"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_graphic_eq_24" />
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/view1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="71%" />
+
+                <TextView
+                    android:id="@+id/view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="수면 규칙성>" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_mood_24" />
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/view3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="31 min" />
+
+                <TextView
+                    android:id="@+id/view4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="잠들기까지 걸린 시간>" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_brightness_3_24" />
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/view5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="오전 12:32" />
+
+                <TextView
+                    android:id="@+id/view6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="취침 시간 >" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_access_alarm_24" />
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/view7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="오전 7:01" />
+
+                <TextView
+                    android:id="@+id/view8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="기상 시간 >" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
