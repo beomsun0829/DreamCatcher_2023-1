@@ -26,7 +26,7 @@ public class ResultSleepFragment extends Fragment {
     private FragmentResultSleepBinding binding;
     private TextView viewMemo, viewWeek, viewDate;
     private ImageView calendar;
-    private String monthStr = "", dayOfWeekStr = "";
+    private String monthStr = " ", dayOfWeekStr = "";
     private int date;
 
     @Nullable
