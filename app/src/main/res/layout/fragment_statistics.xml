@@ -63,7 +63,8 @@
                         android:id="@+id/sleepTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:text="-"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -74,12 +75,13 @@
                 android:layout_marginHorizontal="20dp"
                 android:background="#777777"/>
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart"
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_margin="15dp"
                 />
+
 
             <View
                 android:layout_width="match_parent"
@@ -111,7 +113,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
-                            android:text="10 Hours" />
+                            android:text="-" />
 
                         <TextView
                             android:id="@+id/bedTimeLabel"
@@ -135,7 +137,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
-                            android:text="8:00 AM" />
+                            android:text="-" />
 
                         <TextView
                             android:id="@+id/wakeUpTimeLabel"
@@ -163,7 +165,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
-                            android:text="90%" />
+                            android:text="-" />
 
                         <TextView
                             android:id="@+id/sleepRegularityLabel"
@@ -188,7 +190,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="30sp"
-                            android:text="15 min" />
+                            android:text="-" />
 
                         <TextView
                             android:id="@+id/timeToSleepLabel"
