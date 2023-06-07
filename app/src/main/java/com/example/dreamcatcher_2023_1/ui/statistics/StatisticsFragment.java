@@ -2,6 +2,8 @@ package com.example.dreamcatcher_2023_1.ui.statistics;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +11,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentStatisticsBinding;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,17 +45,45 @@ import java.util.Calendar;
 public class StatisticsFragment extends Fragment {
 
     private FragmentStatisticsBinding binding;
-    private View root;
+    private ArrayList<JSONObject> sleepRecords;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        StatisticsViewModel statisticsViewModel =
-                new ViewModelProvider(this).get(StatisticsViewModel.class);
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        StatisticsViewModel statisticsViewModel = new ViewModelProvider(this).get(StatisticsViewModel.class);
         binding = FragmentStatisticsBinding.inflate(inflater, container, false);
-        root = binding.getRoot();
+        sleepRecords = getSleepData();
 
-        // Parse sleep data from sleep_data.txt file
+        final Calendar c = Calendar.getInstance();
+        String selectedDate = String.format("%d%02d%02d", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH));
+        updateAllData(selectedDate);
+
+        binding.currentDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        (view1, datePickerYear, datePickerMonth, datePickerDay) -> {
+                            String formattedDate = String.format("%d%02d%02d", datePickerYear, datePickerMonth+1, datePickerDay);
+                            binding.currentDate.setText(formattedDate);
+                            updateAllData(formattedDate);
+                        }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    private ArrayList<JSONObject> getSleepData() {
         String sleepDataString = readSleepDataFromFile();
         ArrayList<JSONObject> sleepRecords = new ArrayList<>();
 
@@ -63,38 +99,20 @@ public class StatisticsFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-
-
-        // Get current date
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        // Current date TextView
-        TextView currentDate = root.findViewById(R.id.currentDate);
-        currentDate.setText(String.format("%d/%d/%d", year, month+1, day));  // month is 0-indexed
-
-        currentDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-                        (view1, datePickerYear, datePickerMonth, datePickerDay) -> {
-                            currentDate.setText(String.format("%d/%d/%d", datePickerYear, datePickerMonth+1, datePickerDay));
-                            JSONObject sleepRecord = getSleepRecordForDate(sleepRecords, String.format("%d%02d%02d", datePickerYear, datePickerMonth+1, datePickerDay));
-                            updateSleepRecordFields(sleepRecord, sleepRecords, datePickerYear, datePickerMonth, datePickerDay);
-                        }, year, month, day);
-                datePickerDialog.show();
-            }
-        });
-        return root;
+        return sleepRecords;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    private void updateAllData(String selectedDate) {
+        int year = Integer.parseInt(selectedDate.substring(0, 4));
+        int month = Integer.parseInt(selectedDate.substring(4, 6)) - 1; // adjusting month index
+        int day = Integer.parseInt(selectedDate.substring(6, 8));
+
+        JSONObject sleepRecord = getSleepRecordForDate(sleepRecords, selectedDate);
+        updateSleepRecordFields(sleepRecord, sleepRecords, year, month, day);
+
+        updateWeeklySleepBarChart(sleepRecords, year, month, day);
     }
+
 
     private String readSleepDataFromFile() {
         File file = new File(getContext().getFilesDir(), "sleep_data.txt");
@@ -137,18 +155,12 @@ public class StatisticsFragment extends Fragment {
                 int endHours = sleepRecord.getInt("endHours");
                 int endMinutes = sleepRecord.getInt("endMinutes");
 
-                TextView sleepTime = root.findViewById(R.id.sleepTime);
                 String sleepTimeString = calculateSleepTime(startHours, startMinutes, endHours, endMinutes);
-                sleepTime.setText(sleepTimeString);
+                binding.sleepTime.setText(sleepTimeString);
 
-                TextView bedTime = root.findViewById(R.id.bedTime);
-                bedTime.setText(String.format("%d:%02d", startHours, startMinutes));
+                binding.bedTime.setText(String.format("%d:%02d", startHours, startMinutes));
 
-                TextView wakeUpTime = root.findViewById(R.id.wakeUpTime);
-                wakeUpTime.setText(String.format("%d:%02d", endHours, endMinutes));
-
-                //update PieChart
-                updateSleepPieChart(startHours, endHours);
+                binding.wakeUpTime.setText(String.format("%d:%02d", endHours, endMinutes));
 
                 //update BarChart
                 updateWeeklySleepBarChart(sleepRecords, year, month, day);
@@ -157,14 +169,11 @@ public class StatisticsFragment extends Fragment {
                 e.printStackTrace();
             }
         } else {
-            TextView sleepTime = root.findViewById(R.id.sleepTime);
-            sleepTime.setText("-");
+            binding.sleepTime.setText("-");
 
-            TextView bedTime = root.findViewById(R.id.bedTime);
-            bedTime.setText("-");
+            binding.bedTime.setText("-");
 
-            TextView wakeUpTime = root.findViewById(R.id.wakeUpTime);
-            wakeUpTime.setText("-");
+            binding.wakeUpTime.setText("-");
         }
     }
 
@@ -186,72 +195,86 @@ public class StatisticsFragment extends Fragment {
         return String.format("%d:%02d", sleepHours, sleepMinutes);
     }
 
-    private void updateSleepPieChart(int startHours, int endHours) {
-        PieChart pieChart = root.findViewById(R.id.pieChart);
-        ArrayList<PieEntry> pieEntries = new ArrayList<>();
-
-        // Assuming startHours and endHours are from 0 (midnight) to 23
-        int sleepStart = startHours * 15; // each hour is 15 degrees
-        int sleepEnd = endHours * 15;
-        int sleepDuration = sleepEnd - sleepStart;
-        if (sleepDuration < 0) {
-            // This means the sleep crossed midnight
-            sleepDuration += 360;
-        }
-
-        // Awake time is the remaining time in the 360 degree circle
-        int awakeDuration = 360 - sleepDuration;
-
-        // Now add entries
-        // Sleep time
-        pieEntries.add(new PieEntry(sleepDuration, "Sleep"));
-        // Awake time
-        pieEntries.add(new PieEntry(awakeDuration, "Awake"));
-
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
-        pieDataSet.setColors(new int[] { Color.BLUE, Color.GRAY });
-        PieData pieData = new PieData(pieDataSet);
-        pieChart.setData(pieData);
-
-        // Hide labels
-        pieChart.setDrawEntryLabels(false);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.getLegend().setEnabled(false);
-
-        pieChart.invalidate(); // refresh
-    }
-
     private void updateWeeklySleepBarChart(ArrayList<JSONObject> sleepRecords, int year, int month, int day) {
-        BarChart barChart = root.findViewById(R.id.barChart);
         ArrayList<BarEntry> barEntries = new ArrayList<>();
+        String[] days = new String[7];
 
-        // Get the last 7 days' records
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        cal.add(Calendar.DATE, -6);
+
         for (int i = 0; i < 7; i++) {
-            String date = String.format("%d%02d%02d", year, month+1, day-i);  // Note: month is 0-indexed
+            cal.add(Calendar.DATE, 1); // increment the date
+            String date = String.format("%04d%02d%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DAY_OF_MONTH));
             JSONObject sleepRecord = getSleepRecordForDate(sleepRecords, date);
             if (sleepRecord != null) {
                 try {
                     int startHours = sleepRecord.getInt("startHours");
+                    int startMinutes = sleepRecord.getInt("startMinutes");
                     int endHours = sleepRecord.getInt("endHours");
+                    int endMinutes = sleepRecord.getInt("endMinutes");
 
-                    int sleepDuration = endHours - startHours;
-                    if (sleepDuration < 0) {
+                    int startTotalMinutes = startHours * 60 + startMinutes;
+                    int endTotalMinutes = endHours * 60 + endMinutes;
+
+                    int sleepDurationMinutes = endTotalMinutes - startTotalMinutes;
+                    if (sleepDurationMinutes < 0) {
                         // This means the sleep crossed midnight
-                        sleepDuration += 24;
+                        sleepDurationMinutes += 24 * 60;
                     }
-                    // Add this sleep duration to the bar entries
-                    barEntries.add(new BarEntry(i, sleepDuration));
+
+                    float sleepDurationHours = sleepDurationMinutes / 60f; // Convert to hours with decimal
+                    barEntries.add(new BarEntry(i, sleepDurationHours));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else {
+                barEntries.add(new BarEntry(i, 0, new ColorDrawable(Color.TRANSPARENT)));
             }
+            days[i] = date.substring(4,6) + "/" + date.substring(6,8);
         }
+
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Duration");
         barDataSet.setColor(Color.BLUE);
-        BarData barData = new BarData(barDataSet);
-        barChart.setData(barData);
+        barDataSet.setHighLightAlpha(120); // Set highlight transparency
+        barDataSet.setValueTextColor(Color.BLACK);
+        barDataSet.setValueTextSize(12f);
 
-        barChart.invalidate();  // refresh
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.5f); // Set bar width to 50% of x-axis interval width
+        binding.barChart.setData(barData);
+        binding.barChart.setTouchEnabled(false);
+        binding.barChart.getDescription().setEnabled(false);
+        binding.barChart.animateY(1000, Easing.EaseInCubic);  // animate Y values with easing
+
+        // XAxis
+        XAxis xAxis = binding.barChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(7f);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextSize(12f);
+
+        // YAxis
+        YAxis leftAxis = binding.barChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f);
+        xAxis.setTextSize(12f);
+        binding.barChart.getAxisRight().setEnabled(false); // disable right axis
+
+        // Legend
+        Legend legend = binding.barChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+        legend.setYOffset(10f);
+        legend.setXOffset(10f);
+        legend.setYEntrySpace(0f);
+        legend.setTextSize(8f);
+
+        binding.barChart.invalidate();  // refresh
     }
 }
