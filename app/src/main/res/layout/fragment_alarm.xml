@@ -11,23 +11,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/bg_before_set_alarm">
 
-<!--        <TextView-->
-<!--            android:id="@+id/textAlarm"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            android:layout_marginTop="40dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:text="ALARM"-->
-<!--            android:textSize="24sp" />-->
+        <TextView
+            android:id="@+id/textAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/quicksand_medium"
+            android:text="No alarm has been set"
+            android:textSize="20sp"
+            android:textColor="@color/white" />
 
         <TimePicker
             android:id="@+id/timepicker"
+            android:theme="@style/time_picker_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="50dp"
             android:gravity="center"
             android:timePickerMode="spinner" />
 
@@ -35,9 +38,12 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="wake up easy between" />
+            android:fontFamily="@font/quicksand_medium"
+            android:text="Wake up easy between"
+            android:textSize="18sp"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/viewPreTime"
@@ -45,16 +51,22 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="9:00 AM - 9:30 AM" />
+            android:fontFamily="@font/quicksand_medium"
+            android:text="9:00 AM - 9:30 AM"
+            android:textSize="18sp"
+            android:textColor="@color/white" />
 
-        <ImageButton
+        <Button
             android:id="@+id/buttonSetAlarm"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"
-            android:background="transparent"
-            android:src="@drawable/btn_setAlarm" />
+            android:layout_marginTop="60dp"
+            android:background="@drawable/btn_set_alarm"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="Set Alarm"
+            android:textSize="20sp"
+            android:textColor="@color/white" />
 
 
     </LinearLayout>
