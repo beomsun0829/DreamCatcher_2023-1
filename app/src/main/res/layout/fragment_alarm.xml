@@ -13,20 +13,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textAlarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="ALARM"
-            android:textSize="24sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textAlarm"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="40dp"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:text="ALARM"-->
+<!--            android:textSize="24sp" />-->
 
         <TimePicker
             android:id="@+id/timepicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:gravity="center"
             android:timePickerMode="spinner" />
 
         <TextView
@@ -34,22 +36,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="30dp"
             android:text="wake up easy between" />
 
         <TextView
             android:id="@+id/viewPreTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="9:00 AM - 9:30 AM" />
 
-        <Button
+        <ImageButton
             android:id="@+id/buttonSetAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="Start" />
+            android:layout_marginTop="50dp"
+            android:background="transparent"
+            android:src="@drawable/btn_setAlarm" />
+
 
     </LinearLayout>
 

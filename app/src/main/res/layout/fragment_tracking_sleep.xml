@@ -10,6 +10,7 @@
     android:paddingLeft="20dp"
     android:paddingTop="150dp"
     android:paddingRight="20dp"
+    android:background="@drawable/bg_after_set_alarm"
     tools:context=".ui.alarm.TrackingSleepFragment">
 
 
@@ -17,15 +18,19 @@
         android:id="@+id/viewCurrentTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:text="0:00 AM"
-        android:textSize="80dp" />
+        android:textSize="80dp"
+        android:textColor="#D1CECE"/>
 
     <TextView
         android:id="@+id/viewAlarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:text="Alarm 9:00 AM - 9:30 AM"
-        android:textSize="25dp" />
+        android:textSize="25dp"
+        android:textColor="#D1CECE"/>
 
     <Button
         android:id="@+id/btnStop"
