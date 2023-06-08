@@ -2,7 +2,6 @@ package com.example.dreamcatcher_2023_1.ui.statistics;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,24 +10,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentStatisticsBinding;
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.json.JSONArray;
@@ -154,13 +147,16 @@ public class StatisticsFragment extends Fragment {
                 int startMinutes = sleepRecord.getInt("startMinutes");
                 int endHours = sleepRecord.getInt("endHours");
                 int endMinutes = sleepRecord.getInt("endMinutes");
+                int sleepRate = sleepRecord.getInt("rating");
+                String userNotes = sleepRecord.getString("memo");
 
                 String sleepTimeString = calculateSleepTime(startHours, startMinutes, endHours, endMinutes);
                 binding.sleepTime.setText(sleepTimeString);
-
                 binding.bedTime.setText(String.format("%d:%02d", startHours, startMinutes));
-
                 binding.wakeUpTime.setText(String.format("%d:%02d", endHours, endMinutes));
+                binding.sleepRate.setText(String.valueOf(sleepRate));
+                binding.userNotes.setText(userNotes);
+
 
                 //update BarChart
                 updateWeeklySleepBarChart(sleepRecords, year, month, day);
@@ -170,10 +166,10 @@ public class StatisticsFragment extends Fragment {
             }
         } else {
             binding.sleepTime.setText("-");
-
             binding.bedTime.setText("-");
-
             binding.wakeUpTime.setText("-");
+            binding.sleepRate.setText("-");
+            binding.userNotes.setText("수면 기록이 없습니다");
         }
     }
 
@@ -192,7 +188,7 @@ public class StatisticsFragment extends Fragment {
             sleepHours--;
             sleepMinutes += 60;
         }
-        return String.format("%d:%02d", sleepHours, sleepMinutes);
+        return String.format("%d시간 %02d분", sleepHours, sleepMinutes);
     }
 
     private void updateWeeklySleepBarChart(ArrayList<JSONObject> sleepRecords, int year, int month, int day) {
