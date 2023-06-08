@@ -7,6 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="10dp"
+    android:background="@drawable/bg_memo"
     tools:context=".ui.alarm.EndSleep">
 
   <TextView
@@ -14,53 +15,73 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="40dp"
+      android:fontFamily="@font/quicksand_semi_bold"
       android:text="0:00 ~ 0:00"
-      android:textSize="30dp" />
+      android:textSize="32sp"
+      android:textColor="#D1CECE" />
 
   <TextView
       android:id="@+id/viewTotalSleepTime"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="7시간 45분"
-      android:textSize="40dp" />
+      android:fontFamily="@font/quicksand_semi_bold"
+      android:text="7hr 45min"
+      android:textSize="42sp"
+      android:textColor="#D1CECE" />
 
   <TextView
       android:id="@+id/textView7"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="30dp"
+      android:layout_marginBottom="3dp"
+      android:fontFamily="@font/quicksand_semi_bold"
       android:background="@null"
-      android:text="메모" />
+      android:text="Add sleep Notes"
+      android:textSize="20sp"
+      android:textColor="#D1CECE" />
 
   <EditText
       android:id="@+id/editMemo"
       android:layout_width="380dp"
       android:layout_height="150dp"
       android:background="#DCDCDC"
+      android:padding="10dp"
       android:ems="10"
-      android:hint="오늘의 수면을 기록해보세요."
+      android:fontFamily="@font/quicksand_medium"
       android:inputType="textPersonName"
-      android:padding="10dp" />
+      android:hint="How was your sleep?"
+      android:textSize="15sp"
+      tools:ignore="HardcodedText" />
 
   <TextView
       android:id="@+id/textView6"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="30dp"
+      android:layout_marginTop="35dp"
       android:background="@null"
-      android:text="수면 만족도" />
+      android:fontFamily="@font/quicksand_semi_bold"
+      android:text="Sleep Satisfaction"
+      android:textSize="15sp"
+      android:textColor="#D1CECE"/>
 
   <RatingBar
       android:id="@+id/ratingBar2"
       android:layout_width="240dp"
       android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:theme="@style/RatingBar"
       android:numStars="5" />
 
   <Button
       android:id="@+id/btnResult"
-      android:layout_width="match_parent"
+      android:layout_width="200dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="60dp"
-      android:text="결과보기" />
+      android:background="@drawable/btn_stop_alarm"
+      android:fontFamily="@font/quicksand_semi_bold"
+      android:text="Check the Result"
+      android:textSize="16sp"
+      android:textColor="@color/black" />
 
 </LinearLayout>
