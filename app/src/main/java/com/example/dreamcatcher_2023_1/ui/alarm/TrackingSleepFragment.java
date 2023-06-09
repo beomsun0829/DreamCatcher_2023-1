@@ -40,6 +40,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 
 
+
 public class TrackingSleepFragment extends Fragment {
     private AlarmViewModel alarmViewModel;
 
@@ -50,7 +51,7 @@ public class TrackingSleepFragment extends Fragment {
     private Runnable runnable;
     String monthStr = "";
     String dayOfWeekStr = "";
-    int date, endHours,endMinute;
+    int date, endHours,endMinute, totalTime;
     FragmentTrackingSleepBinding binding;
     private MediaPlayer mediaPlayer;
     int startHours,startMinute;
@@ -69,7 +70,8 @@ public class TrackingSleepFragment extends Fragment {
         viewAlarm=binding.viewAlarm;
         imgAlarm=binding.imgAlarm;
         handler = new Handler();
-    // ViewModel 인스턴스 생성
+
+        // ViewModel 인스턴스 생성
         alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
         startHours= alarmViewModel.getStartHours().getValue();
         startMinute=alarmViewModel.getStartMinute().getValue();
@@ -79,7 +81,12 @@ public class TrackingSleepFragment extends Fragment {
         int startHours = alarmViewModel.getStartHours().getValue();
         int startMinute = alarmViewModel.getStartMinute().getValue();
         String predictionTime = alarmViewModel.getPredictionTime().getValue();
-    //View 초기 설정
+
+
+
+
+
+        //View 초기 설정
         //알람 이미지 불투명도 설정
         imgAlarm.setAlpha(0.2f);
     //예상 알람 시간 띄우기
@@ -120,6 +127,7 @@ public class TrackingSleepFragment extends Fragment {
     public void onResume() {
         super.onResume();
         handler.postDelayed(runnable, 0); // 액티비티가 활성화될 때 시계 시작
+
     }
     @Override
     public void onPause() {
@@ -266,6 +274,5 @@ private void startAlarm() {
             mediaPlayer = null;
         }
     }
-
 
 }

@@ -42,7 +42,7 @@ public class EndSleepFragment extends Fragment {
     Button btnResult;
     EditText editMemo;
     TextView viewSleepTime, viewTotalSleepTime;
-    String sleepTime, totalSleepTime; String Memo=null;
+    String sleepTime, totalSleepTime; String Memo="작성된 기록이 없습니다.";
 
     @Nullable
     @Override
@@ -59,10 +59,12 @@ public class EndSleepFragment extends Fragment {
 
         int startHours = alarmViewModel.getStartHours().getValue();
         int startMinutes = alarmViewModel.getStartMinute().getValue();
+        String formattedStartMinutes = String.format("%02d", startMinutes);
         int endHours = alarmViewModel.getEndHours().getValue();
         int endMinutes = alarmViewModel.getEndMinute().getValue();
+        String formattedEndMinutes = String.format("%02d", endMinutes);
 
-        sleepTime = startHours+":"+startMinutes+"~"+endHours+":"+endMinutes;
+        sleepTime = startHours+":"+formattedStartMinutes+"~"+endHours+":"+formattedEndMinutes;
         totalSleepTime=(endHours-startHours)+"시간 " + (endMinutes-startMinutes)+" 분";
         viewSleepTime.setText(sleepTime);
         viewTotalSleepTime.setText(totalSleepTime);
@@ -94,13 +96,19 @@ public class EndSleepFragment extends Fragment {
                     e.printStackTrace();
                 }
 
+                if(editMemo.getText().toString().isEmpty()){
+                    Memo="등록된 기록이 없습니다";
+                }
+                else {
+                    Memo=editMemo.getText().toString();
+                }
 
-                Memo=editMemo.getText().toString();
+
+
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 ResultSleepFragment resultSleep = new ResultSleepFragment();
-
-                    alarmViewModel.setMemo(Memo);
+                alarmViewModel.setMemo(Memo);
 
 
                 transaction.replace(R.id.layoutMain, resultSleep);

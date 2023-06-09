@@ -41,10 +41,14 @@ public class AlarmFragment extends Fragment {
     private FragmentAlarmBinding binding;
     String predictionTime, hourOfDay;
     private int hours, minutes;
-    int startHours, startMinute, alarmHours, alarmMinute;
+    int startHours, startMinute, alarmHours, alarmMinute, checkAlarm;
     public static MediaRecorder recorder = null;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        Calendar currentTime = Calendar.getInstance();
+        int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = currentTime.get(Calendar.MINUTE);
         //ViewModel 인스턴스 생성
         alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
         //Fragment인스턴스 초기화
@@ -53,9 +57,13 @@ public class AlarmFragment extends Fragment {
         buttonSetAlarm = binding.buttonSetAlarm;
         timePicker = binding.timepicker;
         viewPreTime = binding.viewPreTime;
-        alarmHours = startHours;
-        alarmMinute = startMinute;
-        setPredictionTime(startHours, startMinute);
+        alarmHours = currentHour;
+        alarmMinute = currentMinute;
+
+        setPredictionTime(alarmHours, alarmMinute);
+
+
+
         //TimePicker 동작 리스너
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -77,25 +85,33 @@ public class AlarmFragment extends Fragment {
         buttonSetAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // record
-                startRecording();
-                // 수면 시작 시간 기록
-                sleepTimerStart();
-                // 알람 설정
-                setAlarm();
-                // fragment transaction 객체 생성
-                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
-                // startHours, startMinute, alarmHours, alarmMinute 값 설정
-                alarmViewModel.setStartHours(startHours);
-                alarmViewModel.setStartMinute(startMinute);
-                alarmViewModel.setAlarmHours(alarmHours);
-                alarmViewModel.setAlarmMinute(alarmMinute);
-                alarmViewModel.setPredictionTime(predictionTime);
-                // fragment 전환
-                transaction.replace(R.id.layoutMain, trackingSleep);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                // 현재 시간 가져오기
+                if (alarmHours < currentHour || (alarmHours == currentHour && alarmMinute <= currentMinute)) {
+                    Toast.makeText(requireContext(), "선택한 알람 시간이 현재 시간보다 이전입니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    // record
+                    startRecording();
+                    // 수면 시작 시간 기록
+                    sleepTimerStart();
+                    // 알람 설정
+                    setAlarm();
+                    // fragment transaction 객체 생성
+                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                    TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
+                    // startHours, startMinute, alarmHours, alarmMinute 값 설정
+                    alarmViewModel.setStartHours(startHours);
+                    alarmViewModel.setStartMinute(startMinute);
+                    alarmViewModel.setAlarmHours(alarmHours);
+                    alarmViewModel.setAlarmMinute(alarmMinute);
+                    alarmViewModel.setPredictionTime(predictionTime);
+                    // fragment 전환
+                    transaction.replace(R.id.layoutMain, trackingSleep);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+
             }
         });
 
