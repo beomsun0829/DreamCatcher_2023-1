@@ -211,6 +211,7 @@ public class TrackingSleepFragment extends Fragment {
         //현재 시간, 분 int 형식으로 받기
         currentHours = calendar.get(Calendar.HOUR_OF_DAY);
         currentMinute = calendar.get(Calendar.MINUTE);
+        if(currentHours>12)currentHours-=12;
     }
 //측정 종료
     private void sleepTimerEnd() {
@@ -252,11 +253,10 @@ private void startAlarm() {
         btnStop.setBackground(drawable);
         btnStop.setTextColor(Color.WHITE);
 
-        /*
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.alarm_sound);
         mediaPlayer.setLooping(true);  // Set the MediaPlayer to loop the sound
         mediaPlayer.start();
-         */
+
 
         Toast.makeText(requireContext(), "기상시간 입니다!", Toast.LENGTH_LONG).show();
     }

@@ -47,8 +47,9 @@ public class AlarmFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         Calendar currentTime = Calendar.getInstance();
-        int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = currentTime.get(Calendar.MINUTE);
+        int currentHours = currentTime.get(Calendar.HOUR_OF_DAY);
+        int currentMinutes = currentTime.get(Calendar.MINUTE);
+        if(currentHours>12)currentHours-=12;
         //ViewModel 인스턴스 생성
         alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
         //Fragment인스턴스 초기화
@@ -57,8 +58,8 @@ public class AlarmFragment extends Fragment {
         buttonSetAlarm = binding.buttonSetAlarm;
         timePicker = binding.timepicker;
         viewPreTime = binding.viewPreTime;
-        alarmHours = currentHour;
-        alarmMinute = currentMinute;
+        alarmHours = currentHours;
+        alarmMinute = currentMinutes;
 
         setPredictionTime(alarmHours, alarmMinute);
 
@@ -87,25 +88,33 @@ public class AlarmFragment extends Fragment {
             public void onClick(View v) {
                 // 현재 시간 가져오기
 
-                // record
-                startRecording();
-                // 수면 시작 시간 기록
-                sleepTimerStart();
-                // 알람 설정
-                setAlarm();
-                // fragment transaction 객체 생성
-                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
-                // startHours, startMinute, alarmHours, alarmMinute 값 설정
-                alarmViewModel.setStartHours(startHours);
-                alarmViewModel.setStartMinute(startMinute);
-                alarmViewModel.setAlarmHours(alarmHours);
-                alarmViewModel.setAlarmMinute(alarmMinute);
-                alarmViewModel.setPredictionTime(predictionTime);
-                // fragment 전환
-                transaction.replace(R.id.layoutMain, trackingSleep);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                Calendar currentTime = Calendar.getInstance();
+                int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                int currentMinute = currentTime.get(Calendar.MINUTE);
+                if(currentHour>12) currentHour-=12;
+
+
+
+                    // record
+                    startRecording();
+                    // 수면 시작 시간 기록
+                    sleepTimerStart();
+                    // 알람 설정
+                    setAlarm();
+                    // fragment transaction 객체 생성
+                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                    TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
+                    // startHours, startMinute, alarmHours, alarmMinute 값 설정
+                    alarmViewModel.setStartHours(startHours);
+                    alarmViewModel.setStartMinute(startMinute);
+                    alarmViewModel.setAlarmHours(alarmHours);
+                    alarmViewModel.setAlarmMinute(alarmMinute);
+                    alarmViewModel.setPredictionTime(predictionTime);
+                    // fragment 전환
+                    transaction.replace(R.id.layoutMain, trackingSleep);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
             }
         });
 
