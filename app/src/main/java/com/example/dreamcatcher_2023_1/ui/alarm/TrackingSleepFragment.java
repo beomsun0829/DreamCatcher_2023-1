@@ -1,5 +1,7 @@
 package com.example.dreamcatcher_2023_1.ui.alarm;
 
+import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,28 +35,28 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+
 
 public class TrackingSleepFragment extends Fragment {
     private AlarmViewModel alarmViewModel;
 
     TextView viewCurrentTime,viewAlarm;
     Button btnStop;
+    ImageView imgAlarm;
     private Handler handler;
     private Runnable runnable;
     String monthStr = "";
     String dayOfWeekStr = "";
     int date, endHours,endMinute;
     FragmentTrackingSleepBinding binding;
-    //뒤로가기
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    private MediaPlayer mediaPlayer;
+    int startHours,startMinute;
+    boolean checkAlarm=false;
+    Calendar calendar = Calendar.getInstance();
+    int currentHours, currentMinute, alarmHours, alarmMinute;
 
     @Nullable
     @Override
@@ -62,21 +67,29 @@ public class TrackingSleepFragment extends Fragment {
         viewCurrentTime=binding.viewCurrentTime;
         btnStop=binding.btnStop;
         viewAlarm=binding.viewAlarm;
+        imgAlarm=binding.imgAlarm;
         handler = new Handler();
     // ViewModel 인스턴스 생성
         alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
-
-
+        startHours= alarmViewModel.getStartHours().getValue();
+        startMinute=alarmViewModel.getStartMinute().getValue();
+        alarmHours=alarmViewModel.getAlarmHours().getValue();
+        alarmMinute=alarmViewModel.getAlarmMinute().getValue();
     // AlarmFragment에서 가져온 변수 설정
         int startHours = alarmViewModel.getStartHours().getValue();
         int startMinute = alarmViewModel.getStartMinute().getValue();
         String predictionTime = alarmViewModel.getPredictionTime().getValue();
+    //View 초기 설정
+        //알람 이미지 불투명도 설정
+        imgAlarm.setAlpha(0.2f);
     //예상 알람 시간 띄우기
         viewAlarm.setText(predictionTime);
+    //현재 시간 측정
         runnable = new Runnable() {
             @Override
             public void run() {
                 updateClock();
+                startAlarm();
                 handler.postDelayed(this, 1000);
             }
         };
@@ -89,6 +102,8 @@ public class TrackingSleepFragment extends Fragment {
                 endRecording();
                 //종료 시간 측정
                 sleepTimerEnd();
+                //알람 종료
+                stopAlarm();
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 EndSleepFragment endSleep = new EndSleepFragment();
@@ -117,7 +132,6 @@ public class TrackingSleepFragment extends Fragment {
         int month = calendar.get(Calendar.MONTH) + 1; // 0부터 시작하므로 1을 더해줍니다.
         int date = calendar.get(Calendar.DATE);
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
 
         switch (month) {
             case 1:
@@ -182,30 +196,73 @@ public class TrackingSleepFragment extends Fragment {
                 break;
 
         }
+        //현재 시간, 분 String 형식으로 받기
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
         String currentTime = timeFormat.format(calendar.getTime());
         viewCurrentTime.setText(currentTime);
+        //현재 시간, 분 int 형식으로 받기
+        currentHours = calendar.get(Calendar.HOUR_OF_DAY);
+        currentMinute = calendar.get(Calendar.MINUTE);
     }
-
+//측정 종료
     private void sleepTimerEnd() {
         // 현재 시간을 가져오기
         long currentTimeMillis = System.currentTimeMillis();
         Date currentDate = new Date(currentTimeMillis);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-        // 시간과 분을 가져오기
+        // 측정 종료 시간 설정
         endHours = calendar.get(Calendar.HOUR_OF_DAY);
         endMinute = calendar.get(Calendar.MINUTE);
-
         alarmViewModel.setEndHours(endHours);
         alarmViewModel.setEndMinute(endMinute);
     }
-
+//녹음
     private void endRecording(){
         if(AlarmFragment.recorder != null){
             AlarmFragment.recorder.stop();
             AlarmFragment.recorder.release();
             AlarmFragment.recorder = null;
+        }
+    }
+//알람
+//알람 시작
+private void startAlarm() {
+    // 알람 시간에 도달했을 때 소리 재생
+    if (alarmHours == currentHours && alarmMinute == currentMinute && checkAlarm == false) {
+        checkAlarm = true;
+        imgAlarm.setAlpha(1f);
+    // imgAlarm 회전 애니메이션 설정
+        Animation animation = new RotateAnimation(0f, 15f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.setDuration(30);
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.setRepeatMode(Animation.REVERSE);
+        imgAlarm.startAnimation(animation);
+    //버튼색상 변경
+        Drawable drawable = getResources().getDrawable(R.drawable.btn_set_alarm);
+        btnStop.setBackground(drawable);
+        btnStop.setTextColor(Color.WHITE);
+
+        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.alarm_sound);
+        mediaPlayer.setLooping(true);  // Set the MediaPlayer to loop the sound
+        mediaPlayer.start();
+
+        Toast.makeText(requireContext(), "기상시간 입니다!", Toast.LENGTH_LONG).show();
+    }
+}
+//알람 종료
+    private void stopAlarm() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            checkAlarm = false;
+            imgAlarm.setAlpha(0.2f);
+            Drawable drawable = getResources().getDrawable(R.drawable.btn_stop_alarm);
+            btnStop.setBackground(drawable);
+            btnStop.setTextColor(Color.BLACK);
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 

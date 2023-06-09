@@ -5,14 +5,20 @@
     android:id="@+id/layoutTracking"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_after_set_alarm"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingLeft="20dp"
-    android:paddingTop="150dp"
+    android:paddingTop="100dp"
     android:paddingRight="20dp"
-    android:background="@drawable/bg_after_set_alarm"
     tools:context=".ui.alarm.TrackingSleepFragment">
 
+
+    <ImageView
+        android:id="@+id/imgAlarm"
+        android:layout_width="95dp"
+        android:layout_height="110dp"
+        android:src="@drawable/baseline_alarm_24" />
 
     <TextView
         android:id="@+id/viewCurrentTime"
@@ -21,8 +27,8 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/quicksand_medium"
         android:text="0:00 AM"
-        android:textSize="80dp"
-        android:textColor="#D1CECE"/>
+        android:textColor="#D1CECE"
+        android:textSize="80dp" />
 
     <TextView
         android:id="@+id/viewAlarm"
@@ -31,8 +37,8 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/quicksand_medium"
         android:text="Alarm 9:00 AM - 9:30 AM"
-        android:textSize="25dp"
-        android:textColor="#D1CECE"/>
+        android:textColor="#D1CECE"
+        android:textSize="25dp" />
 
     <Button
         android:id="@+id/btnStop"
@@ -43,7 +49,7 @@
         android:background="@drawable/btn_stop_alarm"
         android:fontFamily="@font/quicksand_bold"
         android:text="Stop Alarm"
-        android:textSize="20sp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
 </LinearLayout>
