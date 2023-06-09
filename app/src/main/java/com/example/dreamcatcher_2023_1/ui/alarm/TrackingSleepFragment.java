@@ -252,9 +252,11 @@ private void startAlarm() {
         btnStop.setBackground(drawable);
         btnStop.setTextColor(Color.WHITE);
 
+        /*
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.alarm_sound);
         mediaPlayer.setLooping(true);  // Set the MediaPlayer to loop the sound
         mediaPlayer.start();
+         */
 
         Toast.makeText(requireContext(), "기상시간 입니다!", Toast.LENGTH_LONG).show();
     }

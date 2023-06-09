@@ -22,18 +22,25 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class StatisticsFragment extends Fragment {
 
@@ -104,6 +111,7 @@ public class StatisticsFragment extends Fragment {
         updateSleepRecordFields(sleepRecord, sleepRecords, year, month, day);
 
         updateWeeklySleepBarChart(sleepRecords, year, month, day);
+        updateDailySleepLineChart(year, month, day);
     }
 
 
@@ -273,4 +281,74 @@ public class StatisticsFragment extends Fragment {
 
         binding.barChart.invalidate();  // refresh
     }
+
+    private void updateDailySleepLineChart(int year, int month, int day){
+        String fileName = String.format("/data/data/com.example.dreamcatcher_2023_1/files/recorded_audio_%04d%02d%02d.3gp", year, month+1, day);
+        List<Entry> entries = getAudioDataFromFile(fileName);
+
+        LineDataSet lineDataSet = new LineDataSet(entries, "Amplitude");
+        lineDataSet.setColor(Color.BLUE);
+        lineDataSet.setValueTextColor(Color.BLACK);
+        lineDataSet.setValueTextSize(12f);
+
+        LineData lineData = new LineData(lineDataSet);
+        binding.lineChart.setData(lineData);
+        binding.lineChart.getDescription().setEnabled(false);
+        binding.lineChart.animateY(1000, Easing.EaseInCubic);  // animate Y values with easing
+
+        // XAxis
+        XAxis xAxis = binding.lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextSize(12f);
+
+        // YAxis
+        YAxis leftAxis = binding.lineChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f);
+        xAxis.setTextSize(12f);
+        binding.lineChart.getAxisRight().setEnabled(false); // disable right axis
+
+        // Legend
+        Legend legend = binding.lineChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+        legend.setYOffset(10f);
+        legend.setXOffset(10f);
+        legend.setYEntrySpace(0f);
+        legend.setTextSize(8f);
+
+        binding.lineChart.invalidate();  // refresh
+    }
+
+    private List<Entry> getAudioDataFromFile(String filename) {
+        List<Entry> entries = new ArrayList<>();
+
+        File file = new File(filename);
+        int size = (int) file.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Convert the byte[] to float[]
+        for (int i = 0; i < bytes.length; i += 2) {
+            int asInt = (bytes[i + 1] & 0xFF)
+                    | ((bytes[i] & 0xFF) << 8);
+            float asFloat = Float.intBitsToFloat(asInt);
+            entries.add(new Entry(i / 2, asFloat));
+        }
+
+        return entries;
+    }
+
+
 }

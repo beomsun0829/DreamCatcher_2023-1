@@ -86,32 +86,26 @@ public class AlarmFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // 현재 시간 가져오기
-                if (alarmHours < currentHour || (alarmHours == currentHour && alarmMinute <= currentMinute)) {
-                    Toast.makeText(requireContext(), "선택한 알람 시간이 현재 시간보다 이전입니다.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else{
-                    // record
-                    startRecording();
-                    // 수면 시작 시간 기록
-                    sleepTimerStart();
-                    // 알람 설정
-                    setAlarm();
-                    // fragment transaction 객체 생성
-                    FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                    TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
-                    // startHours, startMinute, alarmHours, alarmMinute 값 설정
-                    alarmViewModel.setStartHours(startHours);
-                    alarmViewModel.setStartMinute(startMinute);
-                    alarmViewModel.setAlarmHours(alarmHours);
-                    alarmViewModel.setAlarmMinute(alarmMinute);
-                    alarmViewModel.setPredictionTime(predictionTime);
-                    // fragment 전환
-                    transaction.replace(R.id.layoutMain, trackingSleep);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
 
+                // record
+                startRecording();
+                // 수면 시작 시간 기록
+                sleepTimerStart();
+                // 알람 설정
+                setAlarm();
+                // fragment transaction 객체 생성
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                TrackingSleepFragment trackingSleep = new TrackingSleepFragment();
+                // startHours, startMinute, alarmHours, alarmMinute 값 설정
+                alarmViewModel.setStartHours(startHours);
+                alarmViewModel.setStartMinute(startMinute);
+                alarmViewModel.setAlarmHours(alarmHours);
+                alarmViewModel.setAlarmMinute(alarmMinute);
+                alarmViewModel.setPredictionTime(predictionTime);
+                // fragment 전환
+                transaction.replace(R.id.layoutMain, trackingSleep);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -137,7 +131,7 @@ public class AlarmFragment extends Fragment {
     }
 
     private void startRecording() {
-        String dateStr = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String dateStr = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
         File recordFile = new File(getActivity().getFilesDir(), "/recorded_audio_" + dateStr + ".3gp");
 
         recorder = new MediaRecorder();
@@ -218,6 +212,12 @@ public class AlarmFragment extends Fragment {
 
     // 알람 설정
     private void setAlarm() {
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request for permission
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.SCHEDULE_EXACT_ALARM}, 100);
+            return;
+        }
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, alarmHours);
         calendar.set(Calendar.MINUTE, alarmMinute);
@@ -225,7 +225,7 @@ public class AlarmFragment extends Fragment {
 
         AlarmManager alarmManager = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(requireActivity(), TrackingSleepFragment.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, intent, PendingIntent.FLAG_MUTABLE);
 
         // 알람 설정
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
