@@ -257,6 +257,7 @@ private void startAlarm() {
             checkAlarm = false;
             imgAlarm.setAlpha(0.2f);
             Drawable drawable = getResources().getDrawable(R.drawable.btn_stop_alarm);
+            imgAlarm.clearAnimation();
             btnStop.setBackground(drawable);
             btnStop.setTextColor(Color.BLACK);
             mediaPlayer.stop();
