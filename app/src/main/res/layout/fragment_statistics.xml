@@ -21,21 +21,22 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="25sp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:text="Current Date"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4px"
-                android:layout_marginVertical="20dp"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:background="#777777"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center">
@@ -65,30 +66,45 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4px"
-                android:layout_marginVertical="20dp"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:background="#777777"/>
+
+            <TextView
+                android:id="@+id/weeklyLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="주간 수면 분석" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="16dp"
-                />
+                >
+
+            </com.github.mikephil.charting.charts.BarChart>
+
+            <TextView
+                android:id="@+id/dailyRecordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="수면 안정도" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"
                 />
 
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4px"
-                android:layout_marginVertical="20dp"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:background="#777777" />
 
             <LinearLayout
@@ -120,7 +136,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/view1"
+                            android:id="@+id/sleepStability"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -128,11 +144,11 @@
                             android:text="-" />
 
                         <TextView
-                            android:id="@+id/view2"
+                            android:id="@+id/sleepStabilityLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="다른거 들어갈자리 >" />
+                            android:text="수면 안정성 >" />
 
                     </LinearLayout>
 

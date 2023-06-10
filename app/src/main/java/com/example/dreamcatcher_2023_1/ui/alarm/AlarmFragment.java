@@ -153,13 +153,13 @@ public class AlarmFragment extends Fragment {
 
     private void startRecording() {
         String dateStr = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
-        File recordFile = new File(getActivity().getFilesDir(), "/recorded_audio_" + dateStr + ".3gp");
+        File recordFile = new File(getActivity().getFilesDir(), "/recorded_audio_" + dateStr + ".mp3");
 
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         recorder.setOutputFile(recordFile.getAbsolutePath());
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         try {
             recorder.prepare();
         } catch (IOException e) {
@@ -167,6 +167,7 @@ public class AlarmFragment extends Fragment {
         }
         recorder.start();
     }
+
 
     // 예상 알람 시간 세팅(기준 10분)
     private void setPredictionTime(int hour, int minute) {
