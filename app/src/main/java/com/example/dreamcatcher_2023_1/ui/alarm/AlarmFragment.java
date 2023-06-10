@@ -39,10 +39,11 @@ public class AlarmFragment extends Fragment {
     private TextView textViewCurrentTime, viewPreTime;
     private TimePicker timePicker;
     private FragmentAlarmBinding binding;
-    String predictionTime, hourOfDay;
+    String predictionTime, AmPm,alarmAmPm;
     private int hours, minutes;
     int startHours, startMinute, alarmHours, alarmMinute, checkAlarm;
     public static MediaRecorder recorder = null;
+    private String startAmPm;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -65,7 +66,7 @@ public class AlarmFragment extends Fragment {
 
 
 
-        //TimePicker 동작 리스너
+//TimePicker 동작
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hour, int minute) {
@@ -74,28 +75,30 @@ public class AlarmFragment extends Fragment {
                 alarmMinute = minute;
 
                 if (hour >= 12) {
-                    hourOfDay = "PM";
+                    alarmAmPm = "PM";
                     alarmHours = hour - 12;
                     if (alarmHours == 0) alarmHours = 12;
-                } else hourOfDay = "AM";
+                } else alarmAmPm = "AM";
 
                 //예상 알람 시간 세팅
                 setPredictionTime(hour, minute);
             }
         });
+//알람 설정 버튼 이벤트
         buttonSetAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 현재 시간 가져오기
-
-                Calendar currentTime = Calendar.getInstance();
                 int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
                 int currentMinute = currentTime.get(Calendar.MINUTE);
-                if(currentHour>12) currentHour-=12;
-
-
-
-                    // record
+                if(currentHour>12) {
+                    currentHour-=12;
+                    alarmAmPm="PM";
+                }
+                else{
+                    alarmAmPm="AM";
+                }
+                // record
                     startRecording();
                     // 수면 시작 시간 기록
                     sleepTimerStart();
@@ -110,6 +113,8 @@ public class AlarmFragment extends Fragment {
                     alarmViewModel.setAlarmHours(alarmHours);
                     alarmViewModel.setAlarmMinute(alarmMinute);
                     alarmViewModel.setPredictionTime(predictionTime);
+                    alarmViewModel.setAlarmAmPm(alarmAmPm);
+                    alarmViewModel.setStartAmPm(startAmPm);
                     // fragment 전환
                     transaction.replace(R.id.layoutMain, trackingSleep);
                     transaction.addToBackStack(null);
@@ -137,6 +142,13 @@ public class AlarmFragment extends Fragment {
         // 시간과 분을 가져오기
         startHours = calendar.get(Calendar.HOUR_OF_DAY);
         startMinute = calendar.get(Calendar.MINUTE);
+        if(startHours>12){
+            startHours-=12;
+            startAmPm="PM";
+        }
+        else{
+            startAmPm="AM";
+        }
     }
 
     private void startRecording() {

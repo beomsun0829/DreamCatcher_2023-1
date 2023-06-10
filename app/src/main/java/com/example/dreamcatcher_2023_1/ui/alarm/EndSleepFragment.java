@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,15 +43,18 @@ public class EndSleepFragment extends Fragment {
     FragmentEndSleepBinding binding;
     Button btnResult;
     EditText editMemo;
+    RatingBar ratingBar;
     TextView viewSleepTime, viewTotalSleepTime;
+    float satisfaction;
     String sleepTime, totalSleepTime; String Memo="작성된 기록이 없습니다.";
+    int totalHours, totalMinute;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentEndSleepBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        ratingBar = binding.ratingBar;
         btnResult=binding.btnResult;
         viewSleepTime=binding.viewSleepTime;
         viewTotalSleepTime=binding.viewTotalSleepTime;
@@ -68,6 +73,8 @@ public class EndSleepFragment extends Fragment {
         totalSleepTime=(endHours-startHours)+"시간 " + (endMinutes-startMinutes)+" 분";
         viewSleepTime.setText(sleepTime);
         viewTotalSleepTime.setText(totalSleepTime);
+        totalHours=(endHours-startHours);
+        totalMinute=(endMinutes-endMinutes);
 
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +89,7 @@ public class EndSleepFragment extends Fragment {
                     sleepData.put("endHours", endHours);
                     sleepData.put("endMinutes", endMinutes);
                     sleepData.put("memo", binding.editMemo.getText().toString());
-                    sleepData.put("rating", binding.ratingBar2.getRating());
+                    sleepData.put("rating", binding.ratingBar.getRating());
 
                     JSONArray existingData = readFromFile(getContext());
                     existingData.put(sleepData);
@@ -95,25 +102,26 @@ public class EndSleepFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+            //Memo
                 if(editMemo.getText().toString().isEmpty()){
                     Memo="등록된 기록이 없습니다";
                 }
                 else {
                     Memo=editMemo.getText().toString();
                 }
-
-
-
-
+            //Satisfaction
+                satisfaction= ratingBar.getRating();
+                //Toast.makeText(requireContext(), satisfaction+"만족도", Toast.LENGTH_LONG).show();
+            //set ViewModel
+                alarmViewModel.setMemo(Memo);
+                alarmViewModel.setSatisfaction(satisfaction);
+                alarmViewModel.setTotalMinute(totalMinute);
+                alarmViewModel.setTotalHours(totalHours);
+            //화면 전환
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 ResultSleepFragment resultSleep = new ResultSleepFragment();
-                alarmViewModel.setMemo(Memo);
-
-
                 transaction.replace(R.id.layoutMain, resultSleep);
                 transaction.commit();
-
             }
         });
         return  root;
@@ -150,7 +158,6 @@ public class EndSleepFragment extends Fragment {
             return new JSONArray();
         }
     }
-
     private void writeToFile(String data, Context context) {
         try {
             FileOutputStream fileOutputStream = context.openFileOutput("sleep_data.txt", Context.MODE_PRIVATE);
