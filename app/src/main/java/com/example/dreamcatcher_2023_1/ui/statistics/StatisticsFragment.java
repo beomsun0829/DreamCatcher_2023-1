@@ -182,7 +182,7 @@ public class StatisticsFragment extends Fragment {
             binding.bedTime.setText("-");
             binding.wakeUpTime.setText("-");
             binding.sleepRate.setText("-");
-            binding.userNotes.setText("수면 기록이 없습니다");
+            binding.userNotes.setText("No sleep records");
             binding.sleepStability.setText("-");
         }
     }
@@ -218,7 +218,7 @@ public class StatisticsFragment extends Fragment {
             sleepHours--;
             sleepMinutes += 60;
         }
-        return String.format("%d시간 %02d분", sleepHours, sleepMinutes);
+        return String.format("%dhr %02dmin", sleepHours, sleepMinutes);
     }
 
     private void updateWeeklySleepBarChart(ArrayList<JSONObject> sleepRecords, int year, int month, int day) {

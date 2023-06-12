@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
+    android:background="@drawable/bg_result"
     tools:context=".ui.alarm.ResultSleepFragment">
 
     <LinearLayout
@@ -18,17 +19,20 @@
             android:id="@+id/viewWeek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/quicksand_bold"
             android:text="Monday"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textColor="#D1CECE"/>
 
         <TextView
             android:id="@+id/viewDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
+            android:fontFamily="@font/quicksand_semi_bold"
             android:text="May 8-9"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="#D1CECE"/>
 
         <ImageView
             android:id="@+id/calendar"
@@ -57,16 +61,16 @@
 
         <ProgressBar
             android:id="@+id/progressBar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="76dp"
             android:layout_height="76dp"
             android:layout_gravity="center"
             android:layout_marginRight="20dp"
             android:indeterminate="false"
             android:max="100"
-            android:progressBackgroundTint="#FBE7C6"
+            android:progressBackgroundTint="#DCDCDC"
             android:progressDrawable="@drawable/circle_progressbar"
-            android:progressTint="#edbf41" />
+            android:progressTint="#DE635C" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,28 +81,36 @@
                 android:id="@+id/viewInBed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_semi_bold"
                 android:text="4h 51m"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                android:textColor="#D1CECE"/>
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="In bed" />
+                android:fontFamily="@font/quicksand_semi_bold"
+                android:text="In bed"
+                android:textColor="#D1CECE"/>
 
             <TextView
                 android:id="@+id/viewAsleep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_semi_bold"
                 android:text="3h 40m"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                android:textColor="#D1CECE"/>
 
 
             <TextView
                 android:id="@+id/textView10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Asleep" />
+                android:fontFamily="@font/quicksand_semi_bold"
+                android:text="Asleep"
+                android:textColor="#D1CECE" />
 
         </LinearLayout>
     </LinearLayout>
@@ -112,8 +124,14 @@
         android:id="@+id/viewMemo"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
         android:padding="10dp"
-        android:text="오늘은 잠을 잘 잤다." />
+        android:background="#DCDCDC"
+        android:fontFamily="@font/quicksand_regular"
+        android:text="It was Great!"
+        android:textSize="16dp"
+        android:textColor="#000000" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -134,7 +152,7 @@
                 android:src="@drawable/baseline_graphic_eq_24" />
 
             <LinearLayout
-                android:layout_width="150dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="15dp"
@@ -146,14 +164,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="71%" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="71%"
+                    android:textColor="#D1CECE" />
 
                 <TextView
                     android:id="@+id/view2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="수면 규칙성>" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="sleep regularity >"
+                    android:textSize="14sp"
+                    android:textColor="#D1CECE" />
 
             </LinearLayout>
 
@@ -165,9 +188,10 @@
                 android:src="@drawable/baseline_mood_24" />
 
             <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -176,14 +200,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="31 min" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="31 min"
+                    android:textColor="#D1CECE" />
 
                 <TextView
                     android:id="@+id/view4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="잠들기까지 걸린 시간>" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="fell asleep in >"
+                    android:textColor="#D1CECE" />
             </LinearLayout>
 
         </LinearLayout>
@@ -191,6 +219,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -201,11 +230,12 @@
                 android:src="@drawable/baseline_brightness_3_24" />
 
             <LinearLayout
-                android:layout_width="150dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
                 <TextView
@@ -213,14 +243,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="오전 12:32" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="12:32 AM"
+                    android:textColor="#D1CECE" />
 
                 <TextView
                     android:id="@+id/view6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="취침 시간 >" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="bedtime >"
+                    android:textColor="#D1CECE" />
             </LinearLayout>
 
             <ImageView
@@ -231,10 +265,12 @@
                 android:src="@drawable/baseline_access_alarm_24" />
 
             <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
                 android:layout_weight="1"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
                 <TextView
@@ -242,14 +278,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="AM 7:01" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="7:01 AM"
+                    android:textColor="#D1CECE" />
 
                 <TextView
                     android:id="@+id/view8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="기상 시간 >" />
+                    android:fontFamily="@font/quicksand_semi_bold"
+                    android:text="wake up time >"
+                    android:textColor="#D1CECE" />
             </LinearLayout>
         </LinearLayout>
 

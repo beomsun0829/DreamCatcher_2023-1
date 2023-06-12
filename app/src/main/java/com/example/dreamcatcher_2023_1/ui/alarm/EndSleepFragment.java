@@ -46,7 +46,7 @@ public class EndSleepFragment extends Fragment {
     RatingBar ratingBar;
     TextView viewSleepTime, viewTotalSleepTime;
     float satisfaction;
-    String sleepTime, totalSleepTime; String Memo="작성된 기록이 없습니다.";
+    String sleepTime, totalSleepTime; String Memo="No records";
     int totalHours, totalMinute;
 
     @Nullable
@@ -70,7 +70,7 @@ public class EndSleepFragment extends Fragment {
         String formattedEndMinutes = String.format("%02d", endMinutes);
 
         sleepTime = startHours+":"+formattedStartMinutes+"~"+endHours+":"+formattedEndMinutes;
-        totalSleepTime=(endHours-startHours)+"시간 " + (endMinutes-startMinutes)+" 분";
+        totalSleepTime=(endHours-startHours)+"hr " + (endMinutes-startMinutes)+"min";
         viewSleepTime.setText(sleepTime);
         viewTotalSleepTime.setText(totalSleepTime);
         totalHours=(endHours-startHours);
@@ -104,7 +104,7 @@ public class EndSleepFragment extends Fragment {
                 }
             //Memo
                 if(editMemo.getText().toString().isEmpty()){
-                    Memo="등록된 기록이 없습니다";
+                    Memo="No records";
                 }
                 else {
                     Memo=editMemo.getText().toString();

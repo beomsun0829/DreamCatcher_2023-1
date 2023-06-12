@@ -64,7 +64,7 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
     int currentHours, currentMinute, alarmHours, alarmMinute;
     private int sleepHours=4,sleepMinute=4;
     private String sleepAmPm, endAmPm;
-//움직임 감지
+    //움직임 감지
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private boolean isMovementDetected = false;

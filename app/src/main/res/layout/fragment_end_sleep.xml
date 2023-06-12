@@ -7,8 +7,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@drawable/bg_memo"
-    tools:context=".ui.alarm.EndSleep">
+    android:background="@drawable/bg_after_set_alarm"
+    tools:context=".ui.alarm.EndSleepFragment">
 
   <TextView
       android:id="@+id/viewSleepTime"
@@ -34,23 +34,23 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="30dp"
-      android:layout_marginBottom="3dp"
-      android:fontFamily="@font/quicksand_semi_bold"
+      android:layout_marginBottom="7dp"
       android:background="@null"
-      android:text="Add sleep Notes"
-      android:textSize="20sp"
-      android:textColor="#D1CECE" />
+      android:fontFamily="@font/quicksand_semi_bold"
+      android:text="  Add sleep Notes"
+      android:textColor="#D1CECE"
+      android:textSize="20sp"/>
 
   <EditText
       android:id="@+id/editMemo"
-      android:layout_width="380dp"
+      android:layout_width="360dp"
       android:layout_height="150dp"
       android:background="#DCDCDC"
       android:padding="10dp"
       android:ems="10"
       android:fontFamily="@font/quicksand_medium"
       android:inputType="textPersonName"
-      android:hint="How was your sleep?"
+      android:hint="Leave your sleep note!"
       android:textSize="15sp"
       tools:ignore="HardcodedText" />
 
@@ -59,11 +59,15 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="35dp"
+      android:layout_marginLeft="50dp"
+      android:layout_marginRight="50dp"
+      android:layout_gravity="center"
       android:background="@null"
       android:fontFamily="@font/quicksand_semi_bold"
-      android:text="Sleep Satisfaction"
-      android:textSize="15sp"
-      android:textColor="#D1CECE"/>
+      android:text="How was your sleep?"
+      android:textSize="18sp"
+      android:textColor="#D1CECE"
+      android:textAlignment="center"/>
 
   <RatingBar
       android:id="@+id/ratingBar"
@@ -71,7 +75,8 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp"
       android:theme="@style/RatingBar"
-      android:numStars="5" />
+      android:numStars="5"
+      tools:ignore="SpeakableTextPresentCheck" />
 
   <Button
       android:id="@+id/btnResult"
