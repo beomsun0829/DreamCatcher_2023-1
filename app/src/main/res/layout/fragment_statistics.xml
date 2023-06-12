@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_result"
     tools:context=".ui.statistics.StatisticsFragment">
 
     <ScrollView
@@ -19,18 +20,20 @@
                 android:id="@+id/currentDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
                 android:gravity="center"
                 android:textSize="25sp"
                 android:layout_marginTop="10dp"
                 android:text="Current Date"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textColor="#D1CECE"
+                android:fontFamily="@font/quicksand_bold" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4px"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="10dp"
-                android:background="#777777"/>
+                android:background="#778899" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,6 +54,8 @@
                         android:id="@+id/sleepTimeLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksand_bold"
+                        android:textColor="#D1CECE"
                         android:textSize="25sp"
                         android:text="Sleep Time: " />
 
@@ -68,13 +73,17 @@
                 android:layout_height="4px"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="10dp"
-                android:background="#777777"/>
+                android:background="#778899" />
 
             <TextView
                 android:id="@+id/weeklyLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="주간 수면 분석" />
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/quicksand_bold"
+                android:textSize="15sp"
+                android:textColor="#D1CECE"
+                android:text="Weekly sleep analysis" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChart"
@@ -90,7 +99,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="수면 안정도" />
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/quicksand_bold"
+                android:textSize="15sp"
+                android:textColor="#D1CECE"
+                android:text="Sleep Stability" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
@@ -105,7 +118,7 @@
                 android:layout_height="4px"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="10dp"
-                android:background="#777777" />
+                android:background="#778899" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -141,6 +154,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textSize="23sp"
+                            android:textColor="#D1CECE"
+                            android:fontFamily="@font/quicksand_semi_bold"
                             android:text="-" />
 
                         <TextView
@@ -148,7 +163,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="수면 안정성 >" />
+                            android:fontFamily="@font/quicksand_semi_bold"
+                            android:textSize="15sp"
+                            android:textColor="#D1CECE"
+                            android:text="Sleep Stability >" />
 
                     </LinearLayout>
 
@@ -172,6 +190,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textSize="23sp"
+                            android:textColor="#D1CECE"
+                            android:fontFamily="@font/quicksand_semi_bold"
                             android:text="-" />
 
                         <TextView
@@ -179,7 +199,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="수면 만족도 >" />
+                            android:fontFamily="@font/quicksand_semi_bold"
+                            android:textSize="15sp"
+                            android:textColor="#D1CECE"
+                            android:text="Satisfaction >" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -211,6 +234,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textSize="23sp"
+                            android:textColor="#D1CECE"
+                            android:fontFamily="@font/quicksand_semi_bold"
                             android:text="-" />
 
                         <TextView
@@ -218,7 +243,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="취침 시간 >" />
+                            android:fontFamily="@font/quicksand_semi_bold"
+                            android:textSize="15sp"
+                            android:textColor="#D1CECE"
+                            android:text="Bedtime >" />
                     </LinearLayout>
 
                     <ImageView
@@ -241,6 +269,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textSize="23sp"
+                            android:textColor="#D1CECE"
+                            android:fontFamily="@font/quicksand_semi_bold"
                             android:text="-" />
 
                         <TextView
@@ -248,7 +278,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="기상 시간 >" />
+                            android:fontFamily="@font/quicksand_semi_bold"
+                            android:textSize="15sp"
+                            android:textColor="#D1CECE"
+                            android:text="wake up time >" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -265,6 +298,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
+                    android:textColor="#D1CECE"
+                    android:fontFamily="@font/quicksand_semi_bold"
                     android:text="-" />
             </LinearLayout>
 

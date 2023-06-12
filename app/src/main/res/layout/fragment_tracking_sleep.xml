@@ -13,7 +13,6 @@
     android:paddingRight="20dp"
     tools:context=".ui.alarm.TrackingSleepFragment">
 
-
     <ImageView
         android:id="@+id/imgAlarm"
         android:layout_width="95dp"
