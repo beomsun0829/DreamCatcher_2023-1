@@ -106,7 +106,7 @@ public class StatisticsFragment extends Fragment {
 
     private void updateAllData(String selectedDate) {
         int year = Integer.parseInt(selectedDate.substring(0, 4));
-        int month = Integer.parseInt(selectedDate.substring(4, 6)) - 1; // adjusting month index
+        int month = Integer.parseInt(selectedDate.substring(4, 6)) - 1;
         int day = Integer.parseInt(selectedDate.substring(6, 8));
 
         JSONObject sleepRecord = getSleepRecordForDate(sleepRecords, selectedDate);
@@ -196,8 +196,6 @@ public class StatisticsFragment extends Fragment {
             sum += Math.abs(amplitude);
         }
         float averageAmplitude = sum / audioData.size();
-
-        // Convert the average amplitude to sleep stability percentage
         int sleepStability = (int) ((1f - averageAmplitude) * 100f);
 
         return sleepStability;
@@ -245,11 +243,10 @@ public class StatisticsFragment extends Fragment {
 
                     int sleepDurationMinutes = endTotalMinutes - startTotalMinutes;
                     if (sleepDurationMinutes < 0) {
-                        // This means the sleep crossed midnight
                         sleepDurationMinutes += 24 * 60;
                     }
 
-                    float sleepDurationHours = sleepDurationMinutes / 60f; // Convert to hours with decimal
+                    float sleepDurationHours = sleepDurationMinutes / 60f;
                     barEntries.add(new BarEntry(i, sleepDurationHours));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -263,16 +260,16 @@ public class StatisticsFragment extends Fragment {
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Duration");
         barDataSet.setColor(Color.BLUE);
-        barDataSet.setHighLightAlpha(120); // Set highlight transparency
+        barDataSet.setHighLightAlpha(120);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(12f);
 
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.5f); // Set bar width to 50% of x-axis interval width
+        barData.setBarWidth(0.5f);
         binding.barChart.setData(barData);
         binding.barChart.setTouchEnabled(false);
         binding.barChart.getDescription().setEnabled(false);
-        binding.barChart.animateY(1000, Easing.EaseInCubic);  // animate Y values with easing
+        binding.barChart.animateY(1000, Easing.EaseInCubic);
 
         // XAxis
         XAxis xAxis = binding.barChart.getXAxis();
@@ -288,7 +285,7 @@ public class StatisticsFragment extends Fragment {
         YAxis leftAxis = binding.barChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
         xAxis.setTextSize(12f);
-        binding.barChart.getAxisRight().setEnabled(false); // disable right axis
+        binding.barChart.getAxisRight().setEnabled(false);
 
         // Legend
         Legend legend = binding.barChart.getLegend();
@@ -356,7 +353,7 @@ public class StatisticsFragment extends Fragment {
     private List<Float> extractAudioData(String filePath) {
         List<Float> audioData = new ArrayList<>();
 
-        int bufferSize = 1024; // Adjust the buffer size as needed
+        int bufferSize = 1024;
 
         try {
             FileInputStream fis = new FileInputStream(filePath);
