@@ -291,7 +291,9 @@
                     android:text="wake up time >"
                     android:textColor="#D1CECE" />
             </LinearLayout>
+
         </LinearLayout>
+
 
     </LinearLayout>
 

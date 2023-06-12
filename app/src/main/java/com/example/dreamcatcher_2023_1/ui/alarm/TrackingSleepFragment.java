@@ -2,48 +2,39 @@ package com.example.dreamcatcher_2023_1.ui.alarm;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentTrackingSleepBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 
 public class TrackingSleepFragment extends Fragment implements SensorEventListener{
     private AlarmViewModel alarmViewModel;
@@ -58,7 +49,6 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
     int date, endHours,endMinute, totalTime;
     FragmentTrackingSleepBinding binding;
     private MediaPlayer mediaPlayer;
-    int startHours,startMinute;
     boolean checkAlarm=false;
     Calendar calendar = Calendar.getInstance();
     int currentHours, currentMinute, alarmHours, alarmMinute;
@@ -67,11 +57,12 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
     //움직임 감지
     private SensorManager sensorManager;
     private Sensor accelerometer;
-    private boolean isMovementDetected = false;
+    private boolean isMovementDetected = false, isMovementDetected2=false;
     private Handler movementHandler;
     private Runnable movementRunnable;
     private boolean checkSleep=false;
-
+    private HashMap<Long, Boolean> detectedMovementTimes = new HashMap<>();
+    private boolean isRecordingMovement = false;
 
     @Nullable
     @Override
@@ -85,18 +76,13 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
         imgAlarm=binding.imgAlarm;
         handler = new Handler();
 
-
         // ViewModel 인스턴스 생성
         alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
-        startHours= alarmViewModel.getStartHours().getValue();
-        startMinute=alarmViewModel.getStartMinute().getValue();
         alarmHours=alarmViewModel.getAlarmHours().getValue();
         alarmMinute=alarmViewModel.getAlarmMinute().getValue();
         alarmAmPm=alarmViewModel.getAlarmAmPm().getValue();
 
         // AlarmFragment에서 가져온 변수 설정
-        int startHours = alarmViewModel.getStartHours().getValue();
-        int startMinute = alarmViewModel.getStartMinute().getValue();
         String predictionTime = alarmViewModel.getPredictionTime().getValue();
 
         //View 초기 설정
@@ -124,10 +110,25 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
                     }
                     checkSleep=true;
                     //Toast.makeText(requireContext(), sleepHours+"시간"+sleepMinute, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(requireContext(), "사용자의 움직임이 감지되지 않습니다.", Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(requireContext(), "수면 시작 : 움직임이 10분 이상 감지 되지 않습니다", Toast.LENGTH_SHORT).show();
+                }
+                else{
                     isMovementDetected = false;  // 움직임 감지 초기화
                     movementHandler.postDelayed(this, 60 * 1000);  // 1분 후에 다시 체크
+                }
+
+                if(isMovementDetected==true && checkSleep==true && isMovementDetected2==true){
+                    movementHandler.postDelayed(this, 10 * 1000);
+                    long currentTime = System.currentTimeMillis();
+                    detectedMovementTimes.put(currentTime, true);
+                    Toast.makeText(requireContext(), "뒤척임 감지", Toast.LENGTH_SHORT).show();
+                    isMovementDetected2=false;
+                }
+                else{
+                    movementHandler.postDelayed(this, 10 * 1000);  // 1분 후에 다시 체크
+                    long currentTime = System.currentTimeMillis();
+                    detectedMovementTimes.put(currentTime, false);
+                    Toast.makeText(requireContext(), "뒤척임 감지 없음", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -161,17 +162,15 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
                 alarmViewModel.setSleepAmPm(sleepAmPm);
                 alarmViewModel.setSleepHours(sleepHours);
                 alarmViewModel.setSleepMinute(sleepMinute);
-                alarmViewModel.setSleepAmPm(sleepAmPm);
-                alarmViewModel.setSleepHours(sleepHours);
-                alarmViewModel.setSleepMinute(sleepMinute);
+                alarmViewModel.setEndHours(endHours);
+                alarmViewModel.setEndMinute(endMinute);
+                alarmViewModel.setEndAmPm(endAmPm);
+                alarmViewModel.setDetectedMovementTimes(detectedMovementTimes);
                 //fragment 전환
                 transaction.replace(R.id.layoutMain, endSleep);
                 transaction.commit();
             }
         });
-
-
-
 
         return root;
     }
@@ -182,6 +181,7 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
         handler.postDelayed(runnable, 0); // 액티비티가 활성화될 때 시계 시작
         movementHandler.postDelayed(movementRunnable, 60 * 1000);  // 10초 후에 체크 시작
         sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     @Override
@@ -297,9 +297,6 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
             endAmPm="AM";
         }
         endMinute = calendar.get(Calendar.MINUTE);
-        alarmViewModel.setEndHours(endHours);
-        alarmViewModel.setEndMinute(endMinute);
-        alarmViewModel.setEndAmPm(endAmPm);
     }
 
     // 녹음
@@ -357,14 +354,21 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // 가속도 센서 값 변경 시 호출되는 메서드
+
         float x = event.values[0];
         float y = event.values[1];
         float z = event.values[2];
-
-        // 움직임 감지 여부 확인
-        if (x > 2 || y > 2 || z > 2) {
-            isMovementDetected = true;
+        if(!checkSleep){
+            //수면 유무 판단
+            if (x > 2 || y > 2 || z > 2) {
+                isMovementDetected = true;
+            }
+        }
+        else{
+            //수면 중 움직임 판단
+            if (x > 1 || y > 1 || z > 1) {
+                isMovementDetected2=true;
+            }
         }
     }
 
