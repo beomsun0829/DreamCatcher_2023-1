@@ -1,5 +1,6 @@
 package com.example.dreamcatcher_2023_1.ui.statistics;
 
+
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,13 +8,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.dreamcatcher_2023_1.R;
 import com.example.dreamcatcher_2023_1.databinding.FragmentStatisticsBinding;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.Legend;
@@ -33,11 +32,14 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -104,7 +106,7 @@ public class StatisticsFragment extends Fragment {
 
     private void updateAllData(String selectedDate) {
         int year = Integer.parseInt(selectedDate.substring(0, 4));
-        int month = Integer.parseInt(selectedDate.substring(4, 6)) - 1; // adjusting month index
+        int month = Integer.parseInt(selectedDate.substring(4, 6)) - 1;
         int day = Integer.parseInt(selectedDate.substring(6, 8));
 
         JSONObject sleepRecord = getSleepRecordForDate(sleepRecords, selectedDate);
@@ -165,10 +167,13 @@ public class StatisticsFragment extends Fragment {
                 binding.sleepRate.setText(String.valueOf(sleepRate));
                 binding.userNotes.setText(userNotes);
 
+                // Update sleep stability
+                String filePath = String.format("/data/data/com.example.dreamcatcher_2023_1/files/recorded_audio_%04d%02d%02d.mp3", year, month + 1, day);
+                int sleepStability = calculateSleepStability(filePath);
+                binding.sleepStability.setText(String.format("%d%%", sleepStability));
 
-                //update BarChart
+                // Update BarChart
                 updateWeeklySleepBarChart(sleepRecords, year, month, day);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -178,7 +183,22 @@ public class StatisticsFragment extends Fragment {
             binding.wakeUpTime.setText("-");
             binding.sleepRate.setText("-");
             binding.userNotes.setText("수면 기록이 없습니다");
+            binding.sleepStability.setText("-");
         }
+    }
+
+    private int calculateSleepStability(String filePath) {
+        List<Float> audioData = extractAudioData(filePath);
+
+        // Calculate the average amplitude
+        float sum = 0f;
+        for (float amplitude : audioData) {
+            sum += Math.abs(amplitude);
+        }
+        float averageAmplitude = sum / audioData.size();
+        int sleepStability = (int) ((1f - averageAmplitude) * 100f);
+
+        return sleepStability;
     }
 
 
@@ -223,11 +243,10 @@ public class StatisticsFragment extends Fragment {
 
                     int sleepDurationMinutes = endTotalMinutes - startTotalMinutes;
                     if (sleepDurationMinutes < 0) {
-                        // This means the sleep crossed midnight
                         sleepDurationMinutes += 24 * 60;
                     }
 
-                    float sleepDurationHours = sleepDurationMinutes / 60f; // Convert to hours with decimal
+                    float sleepDurationHours = sleepDurationMinutes / 60f;
                     barEntries.add(new BarEntry(i, sleepDurationHours));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -241,16 +260,16 @@ public class StatisticsFragment extends Fragment {
 
         BarDataSet barDataSet = new BarDataSet(barEntries, "Sleep Duration");
         barDataSet.setColor(Color.BLUE);
-        barDataSet.setHighLightAlpha(120); // Set highlight transparency
+        barDataSet.setHighLightAlpha(120);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(12f);
 
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.5f); // Set bar width to 50% of x-axis interval width
+        barData.setBarWidth(0.5f);
         binding.barChart.setData(barData);
         binding.barChart.setTouchEnabled(false);
         binding.barChart.getDescription().setEnabled(false);
-        binding.barChart.animateY(1000, Easing.EaseInCubic);  // animate Y values with easing
+        binding.barChart.animateY(1000, Easing.EaseInCubic);
 
         // XAxis
         XAxis xAxis = binding.barChart.getXAxis();
@@ -266,7 +285,7 @@ public class StatisticsFragment extends Fragment {
         YAxis leftAxis = binding.barChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
         xAxis.setTextSize(12f);
-        binding.barChart.getAxisRight().setEnabled(false); // disable right axis
+        binding.barChart.getAxisRight().setEnabled(false);
 
         // Legend
         Legend legend = binding.barChart.getLegend();
@@ -282,11 +301,12 @@ public class StatisticsFragment extends Fragment {
         binding.barChart.invalidate();  // refresh
     }
 
-    private void updateDailySleepLineChart(int year, int month, int day){
-        String fileName = String.format("/data/data/com.example.dreamcatcher_2023_1/files/recorded_audio_%04d%02d%02d.3gp", year, month+1, day);
-        List<Entry> entries = getAudioDataFromFile(fileName);
+    private void updateDailySleepLineChart(int year, int month, int day) {
+        String filePath = String.format("/data/data/com.example.dreamcatcher_2023_1/files/recorded_audio_%04d%02d%02d.mp3", year, month + 1, day);
 
-        LineDataSet lineDataSet = new LineDataSet(entries, "Amplitude");
+        List<Float> audioData = extractAudioData(filePath);
+
+        LineDataSet lineDataSet = new LineDataSet(convertToEntries(audioData,100), "Amplitude");
         lineDataSet.setColor(Color.BLUE);
         lineDataSet.setValueTextColor(Color.BLACK);
         lineDataSet.setValueTextSize(12f);
@@ -294,20 +314,22 @@ public class StatisticsFragment extends Fragment {
         LineData lineData = new LineData(lineDataSet);
         binding.lineChart.setData(lineData);
         binding.lineChart.getDescription().setEnabled(false);
-        binding.lineChart.animateY(1000, Easing.EaseInCubic);  // animate Y values with easing
+        binding.lineChart.animateY(1000, Easing.EaseInCubic);
 
         // XAxis
         XAxis xAxis = binding.lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
         xAxis.setDrawGridLines(false);
+        xAxis.setDrawLabels(false);
         xAxis.setTextSize(12f);
 
         // YAxis
         YAxis leftAxis = binding.lineChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
+        leftAxis.setDrawLabels(false);
         xAxis.setTextSize(12f);
-        binding.lineChart.getAxisRight().setEnabled(false); // disable right axis
+        binding.lineChart.getAxisRight().setEnabled(false);
 
         // Legend
         Legend legend = binding.lineChart.getLegend();
@@ -320,31 +342,66 @@ public class StatisticsFragment extends Fragment {
         legend.setYEntrySpace(0f);
         legend.setTextSize(8f);
 
+        // DisableTouch
+        binding.lineChart.setTouchEnabled(false);
+        binding.lineChart.setDragEnabled(false);
+        binding.lineChart.setScaleEnabled(false);
+
         binding.lineChart.invalidate();  // refresh
     }
 
-    private List<Entry> getAudioDataFromFile(String filename) {
-        List<Entry> entries = new ArrayList<>();
+    private List<Float> extractAudioData(String filePath) {
+        List<Float> audioData = new ArrayList<>();
 
-        File file = new File(filename);
-        int size = (int) file.length();
-        byte[] bytes = new byte[size];
+        int bufferSize = 1024;
+
         try {
-            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-            buf.read(bytes, 0, bytes.length);
-            buf.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            FileInputStream fis = new FileInputStream(filePath);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            DataInputStream dis = new DataInputStream(bis);
+
+            byte[] buffer = new byte[bufferSize];
+
+            int bytesRead;
+            while ((bytesRead = dis.read(buffer, 0, bufferSize)) != -1) {
+                ShortBuffer shortBuffer = ByteBuffer.wrap(buffer, 0, bytesRead)
+                        .order(ByteOrder.LITTLE_ENDIAN)
+                        .asShortBuffer();
+
+                while (shortBuffer.hasRemaining()) {
+                    audioData.add((float) shortBuffer.get() / Short.MAX_VALUE);
+                }
+            }
+
+            dis.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Convert the byte[] to float[]
-        for (int i = 0; i < bytes.length; i += 2) {
-            int asInt = (bytes[i + 1] & 0xFF)
-                    | ((bytes[i] & 0xFF) << 8);
-            float asFloat = Float.intBitsToFloat(asInt);
-            entries.add(new Entry(i / 2, asFloat));
+        return audioData;
+    }
+
+
+
+
+    private List<Entry> convertToEntries(List<Float> audioData, int intervalSize) {
+        List<Entry> entries = new ArrayList<>();
+
+        int dataSize = audioData.size();
+        int numIntervals = dataSize / intervalSize;
+
+        for (int i = 0; i < numIntervals; i++) {
+            int startIndex = i * intervalSize;
+            int endIndex = (i + 1) * intervalSize;
+
+            // Calculate the average value for the interval
+            float sum = 0f;
+            for (int j = startIndex; j < endIndex; j++) {
+                sum += audioData.get(j);
+            }
+            float average = sum / intervalSize;
+
+            entries.add(new Entry(i, average));
         }
 
         return entries;

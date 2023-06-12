@@ -41,6 +41,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.4.LTS'
 
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
