@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,9 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -70,11 +67,22 @@ public class EndSleepFragment extends Fragment {
         String formattedEndMinutes = String.format("%02d", endMinutes);
 
         sleepTime = startHours+":"+formattedStartMinutes+"~"+endHours+":"+formattedEndMinutes;
-        totalSleepTime=(endHours-startHours)+"시간 " + (endMinutes-startMinutes)+" 분";
         viewSleepTime.setText(sleepTime);
+
+        if (endHours >= startHours) {
+            totalHours = endHours -startHours;
+            totalMinute = endMinutes - startMinutes;
+        } else {
+            totalHours = (endHours + 12) - startHours;
+            totalMinute = endMinutes - startMinutes;
+        }
+// 음수 값 보정
+        if (totalMinute < 0) {
+            totalHours -= 1;
+            totalMinute += 60;
+        }
+        totalSleepTime=String.format("%d시간 %02d분",totalHours,totalMinute);
         viewTotalSleepTime.setText(totalSleepTime);
-        totalHours=(endHours-startHours);
-        totalMinute=(endMinutes-endMinutes);
 
         btnResult.setOnClickListener(new View.OnClickListener() {
             @Override

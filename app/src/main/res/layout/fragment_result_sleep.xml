@@ -251,7 +251,9 @@
                     android:layout_weight="1"
                     android:text="기상 시간 >" />
             </LinearLayout>
+
         </LinearLayout>
+
 
     </LinearLayout>
 

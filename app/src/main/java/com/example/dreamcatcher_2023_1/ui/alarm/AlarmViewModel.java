@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.HashMap;
+
 public class AlarmViewModel extends ViewModel {
 
     private MutableLiveData<Integer> startHours;
@@ -15,6 +17,7 @@ public class AlarmViewModel extends ViewModel {
     private MutableLiveData<String> predictionTime;
     private MutableLiveData<Integer> endHours,totalHours,totalMinute;
     private MutableLiveData<Integer> endMinute;
+    private MutableLiveData<HashMap> detectedMovementTimes;
     private MutableLiveData<String> dayOfWeekStr;
     private MutableLiveData<String> memo;
     private MutableLiveData<String> alarmAmPm,endAmPm;
@@ -40,6 +43,7 @@ public class AlarmViewModel extends ViewModel {
         startAmPm=new MutableLiveData<>();
         totalHours=new MutableLiveData<>();
         totalMinute=new MutableLiveData<>();
+        detectedMovementTimes=new MutableLiveData<>();
     }
 //AlarmFragment
     public LiveData<Integer> getStartHours() {
@@ -96,6 +100,11 @@ public class AlarmViewModel extends ViewModel {
     }
 
 //TrackingSleepFragment
+    // 수면중 움직임
+    public LiveData<HashMap> getDetectedMovementTimes(){return detectedMovementTimes;}
+    public void setDetectedMovementTimes(HashMap<Long, Boolean> movementTimes) {
+        detectedMovementTimes.setValue(movementTimes);
+    }
     //측정 종료 시간
     public LiveData<Integer> getEndHours() {
         return endHours;
