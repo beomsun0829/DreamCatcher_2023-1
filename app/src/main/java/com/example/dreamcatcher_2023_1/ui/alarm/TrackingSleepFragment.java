@@ -110,7 +110,7 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
                     }
                     checkSleep=true;
                     //Toast.makeText(requireContext(), sleepHours+"시간"+sleepMinute, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(requireContext(), "사용자의 움직임이 감지되지 않습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "수면 시작 : 움직임이 10분 이상 감지 되지 않습니다", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     isMovementDetected = false;  // 움직임 감지 초기화
@@ -121,13 +121,14 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
                     movementHandler.postDelayed(this, 10 * 1000);
                     long currentTime = System.currentTimeMillis();
                     detectedMovementTimes.put(currentTime, true);
+                    Toast.makeText(requireContext(), "뒤척임 감지", Toast.LENGTH_SHORT).show();
                     isMovementDetected2=false;
                 }
                 else{
                     movementHandler.postDelayed(this, 10 * 1000);  // 1분 후에 다시 체크
                     long currentTime = System.currentTimeMillis();
                     detectedMovementTimes.put(currentTime, false);
-                    Toast.makeText(requireContext(), "TEST", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "뒤척임 감지 없음", Toast.LENGTH_SHORT).show();
                 }
 
             }
