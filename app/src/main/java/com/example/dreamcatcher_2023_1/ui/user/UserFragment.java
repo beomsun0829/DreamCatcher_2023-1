@@ -83,8 +83,80 @@ public class UserFragment extends Fragment {
                     "    \"endMinutes\": 21,\n" +
                     "    \"memo\": \"nice\",\n" +
                     "    \"rating\": 3\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230607\",\n" +
+                    "    \"startHours\": 18,\n" +
+                    "    \"startMinutes\": 2,\n" +
+                    "    \"endHours\": 23,\n" +
+                    "    \"endMinutes\": 48,\n" +
+                    "    \"memo\": \"\",\n" +
+                    "    \"rating\": 0\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230608\",\n" +
+                    "    \"startHours\": 20,\n" +
+                    "    \"startMinutes\": 23,\n" +
+                    "    \"endHours\": 7,\n" +
+                    "    \"endMinutes\": 54,\n" +
+                    "    \"memo\": \"nice\",\n" +
+                    "    \"rating\": 3.5\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230609\",\n" +
+                    "    \"startHours\": 23,\n" +
+                    "    \"startMinutes\": 29,\n" +
+                    "    \"endHours\": 6,\n" +
+                    "    \"endMinutes\": 25,\n" +
+                    "    \"memo\": \"\",\n" +
+                    "    \"rating\": 0\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230610\",\n" +
+                    "    \"startHours\": 20,\n" +
+                    "    \"startMinutes\": 32,\n" +
+                    "    \"endHours\": 8,\n" +
+                    "    \"endMinutes\": 22,\n" +
+                    "    \"memo\": \"bad\",\n" +
+                    "    \"rating\": 2\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230611\",\n" +
+                    "    \"startHours\": 7,\n" +
+                    "    \"startMinutes\": 45,\n" +
+                    "    \"endHours\": 13,\n" +
+                    "    \"endMinutes\": 12,\n" +
+                    "    \"memo\": \"\",\n" +
+                    "    \"rating\": 0\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230612\",\n" +
+                    "    \"startHours\": 7,\n" +
+                    "    \"startMinutes\": 45,\n" +
+                    "    \"endHours\": 16,\n" +
+                    "    \"endMinutes\": 32,\n" +
+                    "    \"memo\": \"\",\n" +
+                    "    \"rating\": 0\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230613\",\n" +
+                    "    \"startHours\": 2,\n" +
+                    "    \"startMinutes\": 37,\n" +
+                    "    \"endHours\": 11,\n" +
+                    "    \"endMinutes\": 10,\n" +
+                    "    \"memo\": \"\",\n" +
+                    "    \"rating\": 4.5\n" +
+                    "  },\n" +
+                    "  {\n" +
+                    "    \"date\": \"20230613\",\n" +
+                    "    \"startHours\": 3,\n" +
+                    "    \"startMinutes\": 38,\n" +
+                    "    \"endHours\": 3,\n" +
+                    "    \"endMinutes\": 38,\n" +
+                    "    \"memo\": \"\",\n" +
+                    "    \"rating\": 0\n" +
                     "  }\n" +
-                    "]\n");
+                    "]");
             fileWriter.close();
             Toast.makeText(getActivity(), "Sleep data file modified", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
