@@ -16,13 +16,14 @@ public class AlarmViewModel extends ViewModel {
     private MutableLiveData<Integer> alarmMinute;
     private MutableLiveData<String> predictionTime;
     private MutableLiveData<Integer> endHours,totalHours,totalMinute;
-    private MutableLiveData<Integer> endMinute;
+    private MutableLiveData<Integer> endMinute, checkSleep;
     private MutableLiveData<HashMap> detectedMovementTimes;
     private MutableLiveData<String> dayOfWeekStr;
     private MutableLiveData<String> memo;
     private MutableLiveData<String> alarmAmPm,endAmPm;
     private MutableLiveData<String> sleepAmPm,startAmPm;
     private MutableLiveData<Float> satisfaction;
+
 
     public AlarmViewModel() {
         startHours = new MutableLiveData<>();
@@ -44,6 +45,7 @@ public class AlarmViewModel extends ViewModel {
         totalHours=new MutableLiveData<>();
         totalMinute=new MutableLiveData<>();
         detectedMovementTimes=new MutableLiveData<>();
+        checkSleep=new MutableLiveData<>();
     }
 //AlarmFragment
     public LiveData<Integer> getStartHours() {
@@ -105,6 +107,15 @@ public class AlarmViewModel extends ViewModel {
     public void setDetectedMovementTimes(HashMap<Long, Boolean> movementTimes) {
         detectedMovementTimes.setValue(movementTimes);
     }
+
+    public LiveData<Integer> getCheckSleep() {
+        return checkSleep;
+    }
+
+    public void setCheckSleep(int checksleep) {
+        checkSleep.setValue(checksleep);
+    }
+
     //측정 종료 시간
     public LiveData<Integer> getEndHours() {
         return endHours;

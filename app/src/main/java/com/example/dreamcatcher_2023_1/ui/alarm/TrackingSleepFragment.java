@@ -51,8 +51,8 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
     private MediaPlayer mediaPlayer;
     boolean checkAlarm=false;
     Calendar calendar = Calendar.getInstance();
-    int currentHours, currentMinute, alarmHours, alarmMinute;
-    private int sleepHours=4,sleepMinute=4;
+    int currentHours, currentMinute, alarmHours, alarmMinute, startHours, startMinute;
+    private int sleepHours=4,sleepMinute=4,checkNull,sum1,sum2;
     private String sleepAmPm, endAmPm;
     //움직임 감지
     private SensorManager sensorManager;
@@ -81,6 +81,9 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
         alarmHours=alarmViewModel.getAlarmHours().getValue();
         alarmMinute=alarmViewModel.getAlarmMinute().getValue();
         alarmAmPm=alarmViewModel.getAlarmAmPm().getValue();
+        startHours=alarmViewModel.getStartHours().getValue();
+        startMinute=alarmViewModel.getStartMinute().getValue();
+        checkNull=alarmViewModel.getCheckSleep().getValue();
 
         // AlarmFragment에서 가져온 변수 설정
         String predictionTime = alarmViewModel.getPredictionTime().getValue();
@@ -154,6 +157,15 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
                 sleepTimerEnd();
                 //알람 종료
                 stopAlarm();
+                sum1 =endHours-startHours;
+                sum2=endMinute-startMinute;
+
+                if(sum1 ==0 && sum2==0){
+                    Toast.makeText(requireContext(), "측정 불가 : 수면 시간 1분 이내", Toast.LENGTH_LONG).show();
+                }else{
+                    checkNull=1;
+                }
+
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 EndSleepFragment endSleep = new EndSleepFragment();
@@ -166,6 +178,7 @@ public class TrackingSleepFragment extends Fragment implements SensorEventListen
                 alarmViewModel.setEndMinute(endMinute);
                 alarmViewModel.setEndAmPm(endAmPm);
                 alarmViewModel.setDetectedMovementTimes(detectedMovementTimes);
+                alarmViewModel.setCheckSleep(checkNull);
                 //fragment 전환
                 transaction.replace(R.id.layoutMain, endSleep);
                 transaction.commit();

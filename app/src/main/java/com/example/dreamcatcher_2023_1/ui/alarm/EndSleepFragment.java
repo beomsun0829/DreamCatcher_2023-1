@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,9 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -73,6 +70,7 @@ public class EndSleepFragment extends Fragment {
         totalSleepTime=(endHours-startHours)+"시간 " + (endMinutes-startMinutes)+" 분";
         viewSleepTime.setText(sleepTime);
         viewTotalSleepTime.setText(totalSleepTime);
+
         totalHours=(endHours-startHours);
         totalMinute=(endMinutes-endMinutes);
 

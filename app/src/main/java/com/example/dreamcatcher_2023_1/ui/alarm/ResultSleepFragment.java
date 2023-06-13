@@ -29,7 +29,7 @@ public class ResultSleepFragment extends Fragment {
     private TextView viewMemo, viewWeek, viewDate,viewInBed,viewAsleep, viewWakeUp,viewFallSleep,viewBedTime;
     private ImageView calendar;
     private String bedTimeStr,monthStr = " ", dayOfWeekStr = "",startAmPm,sleepAmPm, endAmPm,memo,inBedStr,sleep,wakeUpStr,wakeUpAmPm,fallSleepStr;
-    private int totalSleepHours,totalSleepMinute,date,totalHours,totalMinute,endHours,endMinute,startHours,startMinute,inBedHours,inBedMinute,sleepHours, sleepMinute, wakeUpHours, wakeUpMinute,fallSleepHours, fallSleepMinute,fallSleepAmPm;
+    private int totalSleepHours,checkNull,totalSleepMinute,date,totalHours,totalMinute,endHours,endMinute,startHours,startMinute,inBedHours,inBedMinute,sleepHours, sleepMinute, wakeUpHours, wakeUpMinute,fallSleepHours, fallSleepMinute,fallSleepAmPm;
     private float satisfaction;
 
     @Nullable
@@ -50,6 +50,7 @@ public class ResultSleepFragment extends Fragment {
         updateClock();
 
         alarmViewModel = new ViewModelProvider(requireActivity()).get(AlarmViewModel.class);
+
     //get viewModel
         memo = alarmViewModel.getMemo().getValue();
         startHours=alarmViewModel.getStartHours().getValue();
@@ -66,52 +67,65 @@ public class ResultSleepFragment extends Fragment {
         wakeUpAmPm=alarmViewModel.getEndAmPm().getValue();
         wakeUpHours=alarmViewModel.getEndHours().getValue();
         wakeUpMinute=alarmViewModel.getEndMinute().getValue();
+        checkNull=alarmViewModel.getCheckSleep().getValue();
         //Toast.makeText(requireContext(), (int)satisfaction+"만족도", Toast.LENGTH_LONG).show();
 
-//화면 설정
+        //화면 설정
         viewMemo.setText(memo);
         viewWeek.setText(dayOfWeekStr);
         viewDate.setText(monthStr + " " + date + "-" + (date + 1));
-   //ProgressBar
+        //ProgressBar
         satisfaction = alarmViewModel.getSatisfaction().getValue()*20;
         progressBar.setProgress((int) satisfaction);
-    //InBed(침대에서 보낸 시간)
-        inBedStr = String.format("%dh %02dm",totalHours,totalMinute);
-        viewInBed.setText(inBedStr);
-    //Asleep(최종 수면 시간)
-        if(wakeUpHours>=sleepHours){
-            totalSleepHours = wakeUpHours - sleepHours;
-        }else{
-            totalSleepHours = (wakeUpHours + 12) - sleepHours;
-        }
-        totalSleepMinute = wakeUpMinute - sleepMinute;
-        if (totalSleepMinute < 0) {
-            totalSleepHours -= 1;
-            totalSleepMinute += 60;
-        }
-        sleep=String.format("%dh %02dm",totalSleepHours,totalSleepMinute);
-        viewAsleep.setText(sleep);
-    //기상시간
-        wakeUpStr=String.format("%s %d:%02d", wakeUpAmPm, wakeUpHours, wakeUpMinute);
-        viewWakeUp.setText(wakeUpStr);
-    //잠들기 까지 걸린시간
-        //잠들기 까지 걸린시간
-        if (sleepHours >= startHours) {
-            fallSleepHours = sleepHours - startHours;
-        } else {
-            fallSleepHours = (sleepHours + 12) - startHours;
-        }
-        fallSleepMinute = sleepMinute - startMinute;
-        if (fallSleepMinute < 0) {
-            fallSleepHours+=1;
-            fallSleepMinute += 60;
-        }
-        fallSleepStr = String.format("%dh %02dm", fallSleepHours, fallSleepMinute);
-        viewFallSleep.setText(fallSleepStr);
 
-        //취침시간
-        bedTimeStr=String.format("%s %d:%02d", sleepAmPm, sleepHours, sleepMinute);
-        viewBedTime.setText(bedTimeStr);
+        if(checkNull==0){
+            viewInBed.setText("측정 시간 없음");
+            viewAsleep.setText("측정 시간 없음");
+            viewWakeUp.setText("측정 시간 없음");
+            viewFallSleep.setText("측정 시간 없음");
+            viewBedTime.setText("측정 시간 없음");
+        }
+        else{
+            //InBed(침대에서 보낸 시간)
+            inBedStr = String.format("%dh %02dm",endHours-startHours,endMinute-startMinute);
+            viewInBed.setText(inBedStr);
+            //Asleep(최종 수면 시간)
+            if(wakeUpHours>=sleepHours){
+                totalSleepHours = wakeUpHours - sleepHours;
+            }else{
+                totalSleepHours = (wakeUpHours + 12) - sleepHours;
+            }
+            totalSleepMinute = wakeUpMinute - sleepMinute;
+            if (totalSleepMinute < 0) {
+                totalSleepHours -= 1;
+                totalSleepMinute += 60;
+            }
+            sleep=String.format("%dh %02dm",totalSleepHours,totalSleepMinute);
+            viewAsleep.setText(sleep);
+            //기상시간
+            wakeUpStr=String.format("%s %d:%02d", wakeUpAmPm, wakeUpHours, wakeUpMinute);
+            viewWakeUp.setText(wakeUpStr);
+            //잠들기 까지 걸린시간
+            if (sleepHours >= startHours) {
+                fallSleepHours = sleepHours - startHours;
+            } else {
+                fallSleepHours = (sleepHours + 12) - startHours;
+            }
+            fallSleepMinute = sleepMinute - startMinute;
+            if (fallSleepMinute < 0) {
+                fallSleepHours+=1;
+                fallSleepMinute += 60;
+            }
+            fallSleepStr = String.format("%dh %02dm", fallSleepHours, fallSleepMinute);
+            viewFallSleep.setText(fallSleepStr);
+
+            //취침시간
+            bedTimeStr=String.format("%s %d:%02d", sleepAmPm, sleepHours, sleepMinute);
+            viewBedTime.setText(bedTimeStr);
+        }
+
+
+
 
     // 캘린더 이미지를 클릭했을 때 DatePickerDialog를 표시
         calendar.setOnClickListener(new View.OnClickListener() {

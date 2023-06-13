@@ -115,6 +115,7 @@ public class AlarmFragment extends Fragment {
                     alarmViewModel.setPredictionTime(predictionTime);
                     alarmViewModel.setAlarmAmPm(alarmAmPm);
                     alarmViewModel.setStartAmPm(startAmPm);
+                    alarmViewModel.setCheckSleep(0);
                     // fragment 전환
                     transaction.replace(R.id.layoutMain, trackingSleep);
                     transaction.addToBackStack(null);
