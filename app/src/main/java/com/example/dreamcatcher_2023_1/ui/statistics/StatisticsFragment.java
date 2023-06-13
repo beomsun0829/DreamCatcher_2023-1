@@ -306,10 +306,9 @@ public class StatisticsFragment extends Fragment {
 
         List<Float> audioData = extractAudioData(filePath);
 
-        LineDataSet lineDataSet = new LineDataSet(convertToEntries(audioData,100), "Amplitude");
+        LineDataSet lineDataSet = new LineDataSet(convertToEntries(audioData,100), "");
         lineDataSet.setColor(Color.BLUE);
-        lineDataSet.setValueTextColor(Color.BLACK);
-        lineDataSet.setValueTextSize(12f);
+        lineDataSet.setDrawValues(false); // disable value labels
 
         LineData lineData = new LineData(lineDataSet);
         binding.lineChart.setData(lineData);
@@ -333,14 +332,7 @@ public class StatisticsFragment extends Fragment {
 
         // Legend
         Legend legend = binding.lineChart.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        legend.setDrawInside(false);
-        legend.setYOffset(10f);
-        legend.setXOffset(10f);
-        legend.setYEntrySpace(0f);
-        legend.setTextSize(8f);
+        legend.setEnabled(false);  // disable legend
 
         // DisableTouch
         binding.lineChart.setTouchEnabled(false);
@@ -349,6 +341,7 @@ public class StatisticsFragment extends Fragment {
 
         binding.lineChart.invalidate();  // refresh
     }
+
 
     private List<Float> extractAudioData(String filePath) {
         List<Float> audioData = new ArrayList<>();
